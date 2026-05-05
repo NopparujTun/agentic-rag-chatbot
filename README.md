@@ -1,20 +1,104 @@
-# Agentic RAG Chatbot
+<p align="center">
+  <img alt="Enterprise Smart Knowledge-Base Logo" src="frontend/public/logo.svg" width="350px">
+</p>
 
-![Agentic RAG](frontend/public/logo.svg) 
+<h1 align="center">Enterprise Smart Knowledge-Base</h1>
 
-**Agentic RAG Chatbot** is an advanced, production-ready Retrieval-Augmented Generation system. It features a modern decoupled architecture with a **React (TypeScript)** frontend and a **FastAPI (Python)** backend. The system enables users to upload PDF documents, automatically ingest and chunk them into a searchable knowledge base, and ask questions in natural language. 
+<p align="center">
+  <strong>AI-powered document assistant with Hybrid Search (Semantic + Keyword) and built-in hallucination detection</strong>
+</p>
 
-By leveraging **Hybrid Search**—combining semantic vector search (Pinecone) with keyword-based retrieval (BM25) and Reciprocal Rank Fusion (RRF)—the application delivers highly relevant and grounded answers.
+<p align="center">
+  <a href="#overview">Overview</a> •
+  <a href="#how-it-works">How It Works</a> •
+  <a href="#core-technologies">Core Technologies</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#installation--usage">Installation & Usage</a> •
+  <a href="#troubleshooting">Troubleshooting</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white" alt="React"/>
+  <img src="https://img.shields.io/badge/FastAPI-0.100%2B-00a393?logo=fastapi&logoColor=white" alt="FastAPI"/>
+  <img src="https://img.shields.io/badge/Pinecone-Vector%20DB-00C896" alt="Pinecone"/>
+  <img src="https://img.shields.io/badge/LangGraph-1.1%2B-orange?logo=langchain&logoColor=white" alt="LangGraph"/>
+</p>
+
+<p align="center">
+  <strong>If you like this project, a star ⭐️ would mean a lot :)</strong><br>
+</p>
+
+## Overview
+
+This repository demonstrates how to build an **Agentic RAG (Retrieval-Augmented Generation)** application using a modern decoupled architecture. It features a React (TypeScript) frontend and a FastAPI (Python) backend. 
+
+Most RAG tutorials show basic concepts but lack guidance on building modular, agent-driven systems — this project bridges that gap by providing **both a high-performance web UI and an extensible backend architecture**.
+
+### What's inside
+
+| Feature | Description |
+|---|---|
+| 🗂️ **Advanced Document Processing** | Utilizes Docling and PyMuPDF for high-fidelity text extraction from complex PDFs |
+| 🧠 **Thai Language NLP Pipeline** | Built-in support for Thai language tokenization, broken vowel fixes, and boundary normalization via PyThaiNLP |
+| ❓ **Hybrid Search Strategy** | Blends dense vector search (semantic) via Pinecone with sparse keyword search (BM25) using Reciprocal Rank Fusion (RRF) |
+| 🤖 **Agentic Orchestration** | LangChain and LangGraph route queries, retrieve context, and evaluate document relevance before answering |
+| ✅ **Faithfulness Evaluation** | Automated Fact-Check Judge verifies every answer against source documents (PASS / FAIL) |
+| 🔍 **Modern UI/UX** | Snappy, real-time React 19 frontend stylized with Tailwind CSS v4 |
+
+### 🎯 Two Parts of This Repo
+
+**1️⃣ Backend (`/backend`)**
+
+A robust REST API built with FastAPI. It handles complex document ingestion, Thai NLP preprocessing, Hybrid Search, and LangGraph orchestration.
+
+**2️⃣ Frontend (`/frontend`)**
+
+A modern web UI built with React 19, TypeScript, Vite, and Tailwind CSS v4. It features a responsive chat interface, a document upload portal, and real-time streaming responses.
+
+## How It Works
+
+### Document Preparation: Hybrid Indexing
+
+Before queries can be processed, documents are ingested and split for optimal retrieval.
+The system automatically extracts text and cleans it using PyThaiNLP. Chunks are embedded with local embedding models and stored in Pinecone (vectors) + a local BM25 index (keywords).
+
+### Query Processing: Intelligent Workflow
+```
+User Query → Hybrid Search (Semantic + BM25) → RRF Retrieval → 
+Agent Evaluation & Context Aggregation → OpenTyphoon LLM Synthesis → Final Response
+```
+
+**Stage 1 — Intelligent Retrieval:** The system performs a Hybrid Search, combining semantic vector search with keyword-based retrieval using Reciprocal Rank Fusion to deliver highly relevant results.
+
+**Stage 2 — Fact-Check Evaluation:** A dedicated Fact-Check Judge (a separate LLM evaluator) automatically verifies that retrieved answers are faithful to the source material — flagging potential hallucinations.
+
+**Stage 3 — Response Generation:** The LLM generates a grounded answer based on the aggregated context and prior chat history.
 
 ---
 
-## 🏗️ Architecture Overview
+## Core Technologies
 
-The system is separated into three main parts:
+This system is built using the latest modern stacks:
 
-1. **Frontend (`/frontend`)**: A modern web UI built with React 19, TypeScript, Vite, and Tailwind CSS v4. It features a responsive chat interface, a document upload portal, and real-time streaming responses.
-2. **Backend (`/backend`)**: A robust REST API built with FastAPI. It handles complex document ingestion (via `docling`, `pymupdf4llm`), LangChain/LangGraph orchestration, Thai NLP preprocessing (via `pythainlp`), and Hybrid Search.
-3. **Research Notebooks (`/notebook`)**: Jupyter notebooks (`agentic_rag.ipynb`, `smart_pdf_conversion.ipynb`) for testing RAG chunking strategies, document conversion accuracy, and embedding models.
+### Backend Stack
+- **FastAPI / Uvicorn**: High-performance REST API
+- **LangChain / LangGraph**: Agent orchestration and query routing
+- **Pinecone**: Vector database for dense embeddings
+- **Rank BM25**: Sparse keyword retrieval
+- **Sentence Transformers**: Local embedding generation
+- **PyThaiNLP**: Advanced Thai text processing
+- **Docling & PyMuPDF**: PDF parsing and extraction
+
+### Frontend Stack
+- **React 19**: Modern UI rendering
+- **Vite 6**: Fast development build tool
+- **Tailwind CSS v4**: Utility-first styling
+- **TypeScript**: Strict type checking
+
+---
+
+## Architecture
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
@@ -45,119 +129,60 @@ The system is separated into three main parts:
 
 ---
 
-## 🌟 Key Features
+## Installation & Usage
 
-- **Advanced Document Processing**: Utilizes `docling` and `PyMuPDF` for high-fidelity text extraction from complex PDFs.
-- **Thai Language NLP Pipeline**: Built-in support for Thai language tokenization, broken vowel fixes, and boundary normalization via `pythainlp`.
-- **Hybrid Search Strategy**: Blends dense vector search (semantic) via Pinecone with sparse keyword search (BM25) for unparalleled retrieval accuracy.
-- **Agentic Orchestration**: Uses `LangChain` and `LangGraph` to route queries, retrieve context, and evaluate document relevance before answering.
-- **Modern UI/UX**: Snappy, real-time React 19 frontend stylized with Tailwind CSS v4.
-
----
-
-## 📁 Directory Structure
-
-```text
-agentic-rag-chatbot/
-├── backend/                  # FastAPI Application
-│   ├── src/                  # Core RAG, Ingestion, and Utils logic
-│   ├── local_bm25_data/      # BM25 Keyword Search Indices
-│   ├── uploaded_docs/        # Temporary storage for uploaded documents
-│   ├── api.py                # FastAPI server and endpoints
-│   ├── config.yaml           # Chunking and Vector DB configurations
-│   └── requirements.txt      # Python dependencies
-│
-├── frontend/                 # React UI Application
-│   ├── src/                  # React Components, Hooks, and API calls
-│   ├── public/               # Static assets
-│   ├── package.json          # Node dependencies
-│   ├── vite.config.ts        # Vite configuration
-│   └── eslint.config.js      # Strict TypeScript linting rules
-│
-├── notebook/                 # Research & Prototyping
-│   ├── agentic_rag.ipynb     # Pipeline experimentations
-│   └── smart_pdf_conversion.ipynb
-│
-├── README.md                 # This file
-└── .gitignore                # Root gitignore rules
-```
-
----
-
-## 🚀 Getting Started
-
-### 1. Backend Setup
+### 1. Backend Setup (FastAPI)
 
 Ensure you have **Python 3.10+** installed.
 
 ```bash
+# Navigate to backend
 cd backend
+
+# Create and activate a virtual environment
 python -m venv venv
 source venv/bin/activate  # Or `venv\Scripts\activate` on Windows
 
+# Install packages
 pip install -r requirements.txt
 ```
 
-**Environment Variables**:
+**Environment Configuration:**
 Create a `.env` file in the `backend/` directory:
 ```env
-# Example configuration
 OPENAI_API_KEY=your_openai_api_key
 PINECONE_API_KEY=your_pinecone_api_key
 ```
 
-**Run the Server**:
+**Run the Server:**
 ```bash
 uvicorn api:app --reload --port 8000
 ```
 
-### 2. Frontend Setup
+### 2. Frontend Setup (React)
 
-Ensure you have **Node.js** (v20+) installed.
+Ensure you have **Node.js (v20+)** installed.
 
 ```bash
+# Navigate to frontend
 cd frontend
+
+# Install dependencies
 npm install
+
+# Run the development server
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173`.
+The frontend will be available at `http://localhost:5173`. Open this URL in your browser to start chatting and uploading documents.
 
 ---
 
-## ⚙️ Configuration Reference
+## Troubleshooting
 
-The behavior of the RAG pipeline is controlled by `backend/config.yaml`:
-
-```yaml
-ingestion:
-  chunk_size: 1000
-  chunk_overlap: 200
-  
-embedding:
-  model_name: "llama-text-embed-v2"
-  device: "cpu"
-
-vector_db:
-  persist_directory: "./local_bm25_data"
-  index_name: "main"
-```
-
----
-
-## 🛠️ Tech Stack Details
-
-**Frontend**:
-- React 19
-- Vite 6
-- Tailwind CSS v4
-- TypeScript
-
-**Backend**:
-- FastAPI & Uvicorn
-- LangChain & LangGraph
-- Pinecone (Vector Database)
-- Sentence Transformers
-- Rank BM25
-- PyThaiNLP
-- Docling & PyMuPDF (PDF Parsing)
+| Area | Common Problems | Suggested Solutions |
+|------|----------------|------------------|
+| **Model Selection** | - Poor context understanding<br>- Hallucinations | - Ensure `OPENAI_API_KEY` or equivalent is correctly set and valid. |
+| **Retrieval Configuration** | - Relevant documents not retrieved | - Verify `PINECONE_API_KEY` and check that the index dimension matches the embedding model. |
+| **PDF Ingestion** | - Text extraction fails or gives garbled output | - Complex PDFs might require Docling configuration tweaks; check the `backend/config.yaml`. |
+| **Frontend Connection** | - Network Error / CORS Issues | - Ensure the backend is running on `http://localhost:8000`. |
