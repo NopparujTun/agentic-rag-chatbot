@@ -1,0 +1,14 @@
+# Ingestion settings for document processing
+ingestion:
+  chunk_size: 1000
+  chunk_overlap: 200
+  
+# Embedding model configuration
+embedding:
+  model_name: "llama-text-embed-v2"
+  device: "cpu"
+
+# Vector database storage settings
+vector_db:
+  persist_directory: "./local_bm25_data"
+  index_name: "main"

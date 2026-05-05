@@ -1,0 +1,17 @@
+node_modules/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+
+# Frontend
+frontend/dist/
+frontend/node_modules/
+
+# Backend
+backend/local_bm25_data/
+backend/uploaded_docs/
+backend/__pycache__/
+
+# Notebooks
+.ipynb_checkpoints/
