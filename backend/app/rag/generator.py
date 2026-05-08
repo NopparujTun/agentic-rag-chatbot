@@ -1,8 +1,4 @@
-"""RAG answer generator with Agentic capabilities.
-
-Uses LangGraph to autonomously decide when to search the knowledge base,
-allowing for multi-step reasoning and dynamic query formulation.
-"""
+"""RAG answer generator with Agentic capabilities."""
 
 import logging
 import os
@@ -12,13 +8,13 @@ from typing import Any, List, Tuple, Set, Optional
 from langchain_core.agents import AgentAction
 from langchain_core.documents import Document
 from langchain_core.messages import SystemMessage, ToolMessage, AIMessage
-from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from langchain_community.retrievers import BM25Retriever
 from sentence_transformers import CrossEncoder
 
-from src.rag.retrieval import HybridRetriever
+from app.rag.retriever import HybridRetriever
+from app.tools.search import create_search_tool
 
 logger = logging.getLogger(__name__)
 
@@ -41,15 +37,6 @@ class RAGAgent:
         max_retries: int = 3,
         recursion_limit: int = 10,
     ):
-        """Initialize the RAG Agent.
-
-        Args:
-            retriever: The HybridRetriever to use for document search.
-            model_name: The name of the LLM to use.
-            temperature: Sampling temperature for the LLM.
-            max_retries: Maximum attempts to generate an answer.
-            recursion_limit: Max steps the agent can take.
-        """
         self.retriever = retriever
         self.max_retries = max_retries
         self.recursion_limit = recursion_limit
@@ -65,41 +52,14 @@ class RAGAgent:
 
     def _get_tools(self) -> List[Any]:
         """Define and return tools available for the agent."""
-
-        @tool
-        def search_knowledge_base(search_query: str) -> str:
-            """Search the enterprise knowledge base for relevant documents.
-            
-            Use this to find context for the user's question. You can use it
-            multiple times with different queries if needed. Provide specific,
-            focused queries.
-            """
-            logger.info(f"Agent executing search_knowledge_base with query: '{search_query}'")
-            found_documents = self.retriever.search(search_query, k=4, fetch_k=10)
-            
-            if not found_documents:
-                return "No relevant documents found for this query. Try a different search strategy or broader keywords."
-            
-            new_documents = []
-            for document in found_documents:
-                if document.page_content not in self._seen_document_contents:
-                    self._seen_document_contents.add(document.page_content)
-                    new_documents.append(document)
-            
-            self.retrieved_documents.extend(new_documents)
-            
-            formatted_docs = []
-            for index, document in enumerate(found_documents, 1):
-                source_path = document.metadata.get('source', 'Unknown')
-                file_name = os.path.basename(source_path)
-                formatted_docs.append(f"--- Document {index} (Source: {file_name}) ---\n{document.page_content}")
-            
-            return "\n\n".join(formatted_docs)
-
+        search_knowledge_base = create_search_tool(
+            self.retriever, 
+            self.retrieved_documents, 
+            self._seen_document_contents
+        )
         return [search_knowledge_base]
 
     def _get_system_message(self) -> SystemMessage:
-        """Construct the agent system prompt enforcing strict grounded generation."""
         return SystemMessage(content=(
             "คุณคือ AI ผู้ช่วยเชี่ยวชาญด้าน 'คู่มือสำนักทะเบียนและประมวลผล มหาวิทยาลัยเชียงใหม่' (CMU Registrar Assistant)\n"
             "หน้าที่หลักของคุณคือการตอบคำถามเกี่ยวกับกฎระเบียบ การลงทะเบียน และบริการต่างๆ ของสำนักทะเบียนและประมวลผล มหาวิทยาลัยเชียงใหม่ โดยใช้ข้อมูลจากระบบค้นหาเอกสาร (search_knowledge_base) เท่านั้น\n\n"
@@ -114,14 +74,6 @@ class RAGAgent:
         ))
 
     def _parse_intermediate_steps(self, messages: List[Any]) -> List[Tuple[AgentAction, str]]:
-        """Extract intermediate steps (actions and observations) from message history.
-        
-        Args:
-            messages: The list of messages returned by the agent state.
-            
-        Returns:
-            A list of tuples containing AgentAction and the resulting observation string.
-        """
         intermediate_steps = []
         for i, message in enumerate(messages):
             if isinstance(message, AIMessage) and getattr(message, 'tool_calls', []):
@@ -141,16 +93,6 @@ class RAGAgent:
         return intermediate_steps
 
     def _invoke_agent(self, agent: Any, input_content: str, attempt: int) -> Tuple[Optional[str], List[Tuple[AgentAction, str]]]:
-        """Invoke the ReAct agent to process the query.
-        
-        Args:
-            agent: The compiled ReAct agent.
-            input_content: The formatted user query string.
-            attempt: Current retry attempt number.
-            
-        Returns:
-            A tuple containing the output string (or None on failure) and intermediate steps.
-        """
         try:
             state = agent.invoke(
                 {"messages": [("user", input_content)]},
@@ -179,15 +121,6 @@ class RAGAgent:
         query: str, 
         chat_history: str = ""
     ) -> Tuple[str, List[Document], List[Tuple[AgentAction, str]]]:
-        """Generate a grounded answer for the given query using ReAct agent.
-        
-        Args:
-            query: The user's question.
-            chat_history: Optional string containing past conversation.
-            
-        Returns:
-            A tuple containing the final answer, retrieved documents, and steps taken.
-        """
         self.retrieved_documents = []
         self._seen_document_contents = set()
         
@@ -215,18 +148,6 @@ def generate_answer(
     chat_history: str = "",
     reranker: Optional[CrossEncoder] = None,
 ) -> Tuple[str, List[Document], List[Tuple[AgentAction, str]]]:
-    """Legacy wrapper for generate_answer to maintain backward compatibility.
-    
-    Args:
-        query: The user's question.
-        vectorstore: The main vector database.
-        bm25_retriever: The BM25 sparse retriever.
-        chat_history: Optional chat history string.
-        reranker: Optional CrossEncoder for reranking.
-        
-    Returns:
-        The generated answer, the list of retrieved documents, and the steps.
-    """
     hybrid_retriever = HybridRetriever(vectorstore, bm25_retriever, reranker)
     rag_agent = RAGAgent(hybrid_retriever)
     return rag_agent.generate(query, chat_history)

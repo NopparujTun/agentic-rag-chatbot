@@ -17,8 +17,8 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_community.retrievers import BM25Retriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src.ingestion.pdf_processor import process_file
-from src.rag.retrieval import save_hybrid_store
+from app.services.pdf_processor import process_file
+from app.storage.vector_store import save_hybrid_store
 
 logger = logging.getLogger(__name__)
 
