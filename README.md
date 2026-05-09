@@ -1,7 +1,3 @@
-<p align="center">
-  <img alt="Enterprise Smart Knowledge-Base Logo" src="frontend/public/logo.svg" width="350px">
-</p>
-
 <h1 align="center">Enterprise Smart Knowledge-Base</h1>
 
 <p align="center">
@@ -13,6 +9,7 @@
   <a href="#how-it-works">How It Works</a> •
   <a href="#core-technologies">Core Technologies</a> •
   <a href="#architecture">Architecture</a> •
+  <a href="#evaluation-benchmarks">Evaluation Benchmarks</a> •
   <a href="#installation--usage">Installation & Usage</a> •
   <a href="#troubleshooting">Troubleshooting</a>
   </p>
@@ -122,6 +119,21 @@ This system is built using the latest modern stacks:
        │  (Vectors)  │     │  (Pickle)    │
        └─────────────┘     └──────────────┘
 ```
+
+---
+
+## Evaluation Benchmarks
+
+The system was evaluated against a custom ground-truth dataset (100 queries) to measure retrieval accuracy and latency across multiple strategies.
+
+**Retrieval Accuracy (MRR@10 & Recall@10):**
+- Baseline Semantic (Dense): 86.8% MRR
+- BM25 Only: 59.1% MRR
+- **Hybrid + Cross-Encoder Reranker: 92.3% MRR (95.0% Recall@10)**
+
+**Latency Performance (End-to-End):**
+- Standard Hybrid (RRF) Latency: **~828 ms**
+- Reranker Latency (Local CPU): ~4.39s
 
 ---
 

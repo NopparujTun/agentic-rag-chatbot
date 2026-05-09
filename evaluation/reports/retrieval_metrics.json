@@ -1,0 +1,2242 @@
+{
+  "summary": {
+    "Dense Only": {
+      "Recall@1": 0.8,
+      "Recall@3": 0.93,
+      "Recall@5": 0.94,
+      "Recall@10": 0.95,
+      "Precision@5": 0.42,
+      "MRR@10": 0.8674999999999998,
+      "nDCG@10": 1.6222704074263172
+    },
+    "BM25 Only": {
+      "Recall@1": 0.43,
+      "Recall@3": 0.69,
+      "Recall@5": 0.74,
+      "Recall@10": 0.95,
+      "Precision@5": 0.3199999999999999,
+      "MRR@10": 0.5904880952380952,
+      "nDCG@10": 1.3018102220723078
+    },
+    "Hybrid (RRF)": {
+      "Recall@1": 0.6,
+      "Recall@3": 0.9,
+      "Recall@5": 0.93,
+      "Recall@10": 0.95,
+      "Precision@5": 0.39399999999999996,
+      "MRR@10": 0.7454166666666667,
+      "nDCG@10": 1.4957823194945061
+    },
+    "Hybrid + Reranker": {
+      "Recall@1": 0.9,
+      "Recall@3": 0.95,
+      "Recall@5": 0.95,
+      "Recall@10": 0.95,
+      "Precision@5": 0.43000000000000005,
+      "MRR@10": 0.9233333333333333,
+      "nDCG@10": 1.7116391831897733
+    }
+  },
+  "per_query": [
+    {
+      "id": 1,
+      "query": "สำนักทะเบียน มช. เปิดทำการกี่โมงถึงกี่โมง",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "query": "เบอร์โทรสำนักทะเบียน มช. คือเบอร์อะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "query": "มช. ใช้ระบบการศึกษาแบบไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "query": "เกรด A ได้กี่คะแนน GPA",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "query": "เกรด B+ ได้กี่คะแนน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "query": "เกรด D ได้กี่คะแนน GPA",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 7,
+      "query": "GPA ขั้นต่ำสำหรับนักศึกษาปริญญาตรีคือเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.25
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 8,
+      "query": "นักศึกษาปริญญาโทต้องมี GPA ขั้นต่ำเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.2
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        }
+      }
+    },
+    {
+      "id": 9,
+      "query": "ปริญญาตรีต้องเรียนกี่หน่วยกิต",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.125
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.25
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 10,
+      "query": "ปริญญาเอกต้องเรียนกี่หน่วยกิต",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 11,
+      "query": "เปิดเทอม 1 ปีการศึกษา 2567 วันไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 12,
+      "query": "สอบปลายภาคเทอม 1 ปี 2567 ช่วงไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 13,
+      "query": "ผลการเรียนเทอม 1 ปี 2567 ประกาศวันไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 14,
+      "query": "ลงทะเบียน add/drop เทอม 2 ได้ถึงวันไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 15,
+      "query": "ภาคฤดูร้อนปีการศึกษา 2567 เปิดวันไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 16,
+      "query": "สอบกลางภาคเทอม 2 ปีการศึกษา 2567 ช่วงไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 17,
+      "query": "วันสุดท้ายถอนวิชาโดยไม่ได้รับ W เทอม 1 ปี 2567 คือวันไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 18,
+      "query": "วันสุดท้ายถอนโดยได้รับ W ในเทอม 2 คือวันไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 19,
+      "query": "ลงทะเบียนล่วงหน้าสำหรับชั้นปีที่ 2 ขึ้นไป เทอม 1 ปี 2567 ช่วงไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 20,
+      "query": "สอบปลายภาค summer ปีการศึกษา 2567 ช่วงไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 21,
+      "query": "ปริญญาตรีลงทะเบียนได้สูงสุดกี่หน่วยกิตต่อภาค",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 22,
+      "query": "ลงทะเบียนขั้นต่ำกี่หน่วยกิต",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 23,
+      "query": "ลงทะเบียนภาคฤดูร้อนได้สูงสุดกี่หน่วยกิต",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 24,
+      "query": "ค่าบำรุงมหาวิทยาลัยต่อภาคเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.14285714285714285
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 25,
+      "query": "ค่าบำรุงกิจกรรมนักศึกษาเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.14285714285714285
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 26,
+      "query": "จ่ายค่าเทอมช้าเสียค่าปรับกี่บาทต่อวัน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 27,
+      "query": "ค่าทรานสคริปต์ภาษาไทยเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 28,
+      "query": "transcript ภาษาอังกฤษราคาเท่าไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 29,
+      "query": "ขอทรานสคริปต์ปกติรอกี่วัน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 30,
+      "query": "ขอทรานสคริปต์เร่งด่วนได้ภายในกี่วัน และเสียค่าใช้จ่ายเพิ่มเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 31,
+      "query": "ใบรับรองการเป็นนักศึกษาภาษาไทยราคาเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 32,
+      "query": "ใบรับรองความประพฤติราคาเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 33,
+      "query": "ค่าส่งเอกสารทางไปรษณีย์ EMS เพิ่มเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 34,
+      "query": "ปริญญาบัตรหายต้องเสียค่าธรรมเนียมเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 35,
+      "query": "หนังสือรับรองสำเร็จการศึกษาชั่วคราวราคาเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 36,
+      "query": "รักษาสภาพนักศึกษาปริญญาตรีต้องเสียเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 37,
+      "query": "รักษาสภาพนักศึกษาบัณฑิตศึกษาต้องเสียเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.14285714285714285
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 38,
+      "query": "ปริญญาตรีหลักสูตร 4 ปี เรียนได้นานสูงสุดกี่ปี",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 39,
+      "query": "ปริญญาโทเรียนได้ไม่เกินกี่ปี",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 40,
+      "query": "ลาพักการศึกษาได้รวมสูงสุดกี่ภาคตลอดหลักสูตร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 41,
+      "query": "เกียรตินิยมอันดับหนึ่งต้องได้ GPA เท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 42,
+      "query": "เกียรตินิยมอันดับสองต้องได้ GPA เท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.14285714285714285
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 43,
+      "query": "TOEIC ต้องได้คะแนนเท่าไหร่ถึงจะจบการศึกษาได้",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 44,
+      "query": "IELTS ขั้นต่ำสำหรับจบการศึกษาปริญญาตรีคือเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 45,
+      "query": "TOEFL iBT ต้องได้กี่คะแนนเพื่อใช้จบการศึกษา",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 46,
+      "query": "นักศึกษาที่มี GPA ต่ำกว่า 2.00 ลงทะเบียนได้สูงสุดกี่หน่วยกิต",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 47,
+      "query": "นักศึกษาจะลงทะเบียนได้ 25 หน่วยกิตต้องมีเงื่อนไขอะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 48,
+      "query": "การถอนวิชาโดยได้รับ W ต้องทำอย่างไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 49,
+      "query": "W ในทรานสคริปต์มีผลต่อ GPA ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 50,
+      "query": "ถ้าถอนทุกวิชาในภาคการศึกษาจะเกิดอะไรขึ้น",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 51,
+      "query": "ถ้าถอนวิชาหลังสัปดาห์ที่ 10 จะได้เกรดอะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 52,
+      "query": "ไม่ชำระค่าธรรมเนียมภายใน 30 วันหลังครบกำหนดจะเกิดอะไรขึ้น",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 53,
+      "query": "นักศึกษาจะพ้นสภาพเพราะ GPA ต้องต่ำกว่าเกณฑ์อย่างไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 54,
+      "query": "รักษาสภาพนักศึกษาได้ต่อเนื่องสูงสุดกี่ภาค",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 55,
+      "query": "ภาคฤดูร้อนมีการรักษาสภาพนักศึกษาไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 56,
+      "query": "เงื่อนไขการได้รับเกียรตินิยมมีอะไรบ้าง",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 57,
+      "query": "นักศึกษาที่ GPA ต่ำกว่า 2.00 แต่ครบหน่วยกิตแล้ว จะสำเร็จการศึกษาได้ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 58,
+      "query": "นักศึกษาปริญญาเอกต้องตีพิมพ์บทความอย่างน้อยกี่บทความ",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 59,
+      "query": "ผลสอบภาษาอังกฤษที่ใช้จบการศึกษาต้องมีอายุไม่เกินกี่ปี",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 60,
+      "query": "ขั้นตอนการลงทะเบียนเรียนผ่านระบบ CMU Registration มีกี่ขั้นตอน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 61,
+      "query": "ชำระค่าเทอมผ่านช่องทางไหนได้บ้าง",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.125
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.125
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 62,
+      "query": "ขอเอกสารทางการศึกษาออนไลน์ได้ที่ไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.2
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 63,
+      "query": "ยื่นขอลาพักการศึกษาต้องแนบเอกสารอะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 64,
+      "query": "ยื่นคำร้องขอสำเร็จการศึกษาก่อนสิ้นภาคอย่างน้อยกี่สัปดาห์",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 65,
+      "query": "ลืมรหัส CMU IT Account จะ reset ได้ที่ไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 66,
+      "query": "ลงทะเบียนวิชาของคณะอื่นได้ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 67,
+      "query": "เกรด I ถ้าไม่ดำเนินการให้เสร็จจะเกิดอะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 68,
+      "query": "ไม่เข้าพิธีรับปริญญาจะรับปริญญาบัตรได้เมื่อไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 69,
+      "query": "อยากได้ใบรับรองก่อนพิธีรับปริญญาทำยังไง",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 70,
+      "query": "ถ้า GPA ต่ำกว่า 2.00 จะลงหน่วยกิตเกิน 22 ได้ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 71,
+      "query": "นักศึกษาที่เคยได้ W ในวิชาบังคับจะได้รับเกียรตินิยมไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 72,
+      "query": "นักศึกษาที่ GPA 3.50 อยากลงทะเบียน 25 หน่วยกิตในภาคฤดูร้อนได้ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        }
+      }
+    },
+    {
+      "id": 73,
+      "query": "ถ้านักศึกษาไม่ลาพักและไม่ลงทะเบียนเลย 3 ภาคติดกัน จะเกิดอะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 74,
+      "query": "นักศึกษาที่รักษาสภาพ 2 ภาคติดแล้ว ยังไม่ลงทะเบียนอีกภาค จะพ้นสภาพไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 75,
+      "query": "ถ้าลงทะเบียนแล้วจ่ายเงินล่าช้า 5 วัน ต้องเสียค่าปรับรวมเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.25
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 76,
+      "query": "นักศึกษาปริญญาเอกหลักสูตร ถ้าใช้เวลาเรียน 9 ปีจะพ้นสภาพไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.14285714285714285
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 77,
+      "query": "นักศึกษาได้เกรด F ในวิชาบังคับ จะได้เกียรตินิยมไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 78,
+      "query": "นักศึกษาปริญญาโทแผน ก ต้องทำอะไรบ้างถึงจะจบได้",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 79,
+      "query": "นักศึกษาที่สอบภาษาอังกฤษได้ผลเมื่อ 3 ปีที่แล้ว จะใช้ผลนั้นสมัครจบได้ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "BM25 Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        }
+      }
+    },
+    {
+      "id": 80,
+      "query": "What is the minimum TOEIC score required to graduate from Chiang Mai University?",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        }
+      }
+    },
+    {
+      "id": 81,
+      "query": "Can I register for more than 22 credits per semester?",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "BM25 Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        }
+      }
+    },
+    {
+      "id": 82,
+      "query": "What happens if I withdraw from all courses in a semester?",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "BM25 Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        }
+      }
+    },
+    {
+      "id": 83,
+      "query": "What is the late payment fine per day at CMU?",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "BM25 Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        }
+      }
+    },
+    {
+      "id": 84,
+      "query": "How long does it take to get an urgent transcript at CMU?",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "BM25 Only": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 0.0,
+          "MRR@10": 0.0
+        }
+      }
+    },
+    {
+      "id": 85,
+      "query": "ถอน w ได้ถึงเมือไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.14285714285714285
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 86,
+      "query": "transcript eng ราคาเท่าไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 87,
+      "query": "gpa ต่ำโดนรีไทร์ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.25
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        }
+      }
+    },
+    {
+      "id": 88,
+      "query": "ขอใบรับรองจบกี่วัน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.2
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        }
+      }
+    },
+    {
+      "id": 89,
+      "query": "สมัครเรียน มช ออนไลน์ได้ที่ไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.125
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.3333333333333333
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 90,
+      "query": "ปริญญาบัตรหาย ต้องทำยังไง",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 91,
+      "query": "เว็บไซต์สำนักทะเบียน มช คืออะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.2
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 92,
+      "query": "อีเมลติดต่อสำนักทะเบียน มช. คืออะไร",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 93,
+      "query": "สำนักทะเบียน มช. ตั้งอยู่ที่ไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 94,
+      "query": "ปริญญาโทแผน ข ต้องทำอะไรถึงจะจบได้",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 95,
+      "query": "ปริญญาตรี 5 ปีเรียนได้สูงสุดกี่ปี",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 96,
+      "query": "พิธีพระราชทานปริญญาบัตร มช. จัดประมาณช่วงเดือนไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 97,
+      "query": "ลงทะเบียนล่วงหน้าเทอม 2 ปีการศึกษา 2567 ช่วงไหน",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 98,
+      "query": "ประกันสุขภาพนักศึกษาปีที่ 1 บังคับหรือเปล่า และค่าใช้จ่ายเท่าไหร่",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.1
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.25
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 99,
+      "query": "ถ้าต้องการยื่นขอลาพักเพราะถูกเกณฑ์ทหาร ทำได้ไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.16666666666666666
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 0.5
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    },
+    {
+      "id": 100,
+      "query": "นักศึกษาที่ GPA 3.50 พอดี และไม่เคยได้ W ในวิชาบังคับ แต่เคยถูกโทษทางวินัย จะได้เกียรตินิยมไหม",
+      "strategies": {
+        "Dense Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "BM25 Only": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid (RRF)": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        },
+        "Hybrid + Reranker": {
+          "Recall@10": 1.0,
+          "MRR@10": 1.0
+        }
+      }
+    }
+  ]
+}
