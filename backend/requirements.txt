@@ -23,3 +23,11 @@ pymupdf4llm
 docling
 google-genai
 Pillow
+# Infrastructure evolution dependencies
+boto3
+sqlalchemy
+psycopg2-binary
+asyncpg
+celery
+redis
+elasticsearch

@@ -2,9 +2,8 @@
 
 import concurrent.futures
 import logging
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
-from langchain_community.retrievers import BM25Retriever
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_pinecone import PineconeVectorStore, PineconeEmbeddings
@@ -36,7 +35,7 @@ class HybridRetriever:
     def __init__(
         self,
         vectorstore: PineconeVectorStore,
-        bm25_retriever: Optional[BM25Retriever] = None,
+        bm25_retriever: Optional[Any] = None,
         reranker: Optional[CrossEncoder] = None,
         rrf_k: int = DEFAULT_RRF_K,
     ):
@@ -55,8 +54,8 @@ class HybridRetriever:
             future_vector = executor.submit(self.vectorstore.similarity_search, query, k=fetch_k)
             
             if self.bm25_retriever is not None:
-                self.bm25_retriever.k = fetch_k
-                future_bm25 = executor.submit(self.bm25_retriever.invoke, query)
+                # Custom Elasticsearch BM25 Retriever
+                future_bm25 = executor.submit(self.bm25_retriever.invoke, query, top_k=fetch_k)
             else:
                 future_bm25 = None
             

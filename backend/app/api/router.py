@@ -3,33 +3,43 @@
 import logging
 import os
 import shutil
+import tempfile
 from typing import List, Dict, Any
 
-from fastapi import APIRouter, Request, UploadFile, File, HTTPException
+from fastapi import APIRouter, Request, UploadFile, File, HTTPException, Depends
 
 from app.models.schemas import ChatRequest
 from app.services.chat_service import process_chat
 from app.services.ingestion_service import run_ingestion_pipeline
-from app.storage.vector_store import clear_hybrid_store, load_hybrid_store
+from app.storage.vector_store import clear_hybrid_store
 from app.core.config import load_config
+from app.core.dependencies import (
+    get_lazy_embedding_model,
+    get_lazy_hybrid_store,
+    get_lazy_reranker,
+    clear_global_store
+)
+from app.services.s3_service import upload_file_to_s3, delete_s3_bucket_contents
 
 logger = logging.getLogger(__name__)
 
 api_router = APIRouter()
 app_config = load_config()
-UPLOAD_DIRECTORY = os.path.abspath(app_config.get("upload_dir", "uploaded_docs"))
 
 
 @api_router.post("/api/chat")
 async def chat_endpoint(request: Request, body: ChatRequest) -> Dict[str, Any]:
     """Endpoint to handle user queries and generate answers."""
     try:
+        vector_store, bm25_retriever = get_lazy_hybrid_store()
+        reranker = get_lazy_reranker()
+        
         return process_chat(
             query=body.query,
             chat_history=body.chat_history,
-            vector_store=request.app.state.vector_store,
-            bm25_retriever=request.app.state.bm25_retriever,
-            reranker=request.app.state.reranker
+            vector_store=vector_store,
+            bm25_retriever=bm25_retriever,
+            reranker=reranker
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -40,64 +50,77 @@ async def chat_endpoint(request: Request, body: ChatRequest) -> Dict[str, Any]:
 
 @api_router.post("/api/upload")
 async def upload_document(request: Request, files: List[UploadFile] = File(...)) -> Dict[str, Any]:
-    """Endpoint to handle document uploads and trigger ingestion."""
-    os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
+    """Endpoint to handle document uploads and trigger asynchronous ingestion."""
+    from app.tasks import ingest_documents_task
     
-    saved_file_paths = []
+    saved_filenames = []
     allowed_extensions = (".pdf", ".docx", ".txt")
     
     for uploaded_file in files:
         if not uploaded_file.filename.lower().endswith(allowed_extensions):
             continue
+            
+        file_bytes = await uploaded_file.read()
         
-        file_location = os.path.join(UPLOAD_DIRECTORY, uploaded_file.filename)
-        with open(file_location, "wb+") as file_object:
-            shutil.copyfileobj(uploaded_file.file, file_object)
-        saved_file_paths.append(file_location)
+        # Upload to S3
+        s3_url = upload_file_to_s3(file_bytes, uploaded_file.filename)
+        logger.info(f"Uploaded {uploaded_file.filename} to S3 at {s3_url}")
         
-    if not saved_file_paths:
+        saved_filenames.append(uploaded_file.filename)
+        
+    if not saved_filenames:
         raise HTTPException(status_code=400, detail="No valid files provided. Allowed: PDF, DOCX, TXT.")
         
     try:
-        new_vector_store, new_bm25_retriever, total_indexed_chunks, ingestion_time = run_ingestion_pipeline(
-            file_paths=saved_file_paths,
-            embedding_model=request.app.state.embedding_model,
-            index_name=app_config["vector_db"]["index_name"],
-            persist_dir=app_config["vector_db"]["persist_directory"],
-            chunk_size=app_config["ingestion"]["chunk_size"],
-            chunk_overlap=app_config["ingestion"]["chunk_overlap"]
-        )
-        
-        request.app.state.vector_store = new_vector_store
-        request.app.state.bm25_retriever = new_bm25_retriever
+        # Trigger Celery Task
+        task = ingest_documents_task.delay(saved_filenames)
         
         return {
-            "message": "Ingestion successful",
-            "total_chunks": total_indexed_chunks,
-            "ingestion_time_seconds": round(ingestion_time, 2),
-            "files_processed": [os.path.basename(path) for path in saved_file_paths]
+            "message": "Ingestion started",
+            "task_id": task.id,
+            "files_processed": saved_filenames
         }
     except Exception as e:
-        logger.error(f"Ingestion failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Ingestion failed: {str(e)}")
+        logger.error(f"Failed to start ingestion task: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to start ingestion task: {str(e)}")
+
+
+@api_router.get("/api/tasks/{task_id}")
+async def get_task_status(task_id: str) -> Dict[str, Any]:
+    """Endpoint to check the status of a Celery task."""
+    from app.core.celery_app import celery_app
+    from celery.result import AsyncResult
+    
+    task_result = AsyncResult(task_id, app=celery_app)
+    
+    response = {
+        "task_id": task_id,
+        "status": task_result.status,
+    }
+    
+    if task_result.status == "SUCCESS":
+        response["result"] = task_result.result
+        # Reload lazy stores on success
+        clear_global_store()
+    elif task_result.status == "FAILURE":
+        response["error"] = str(task_result.result)
+        
+    return response
 
 
 @api_router.post("/api/clear")
 async def clear_kb(request: Request) -> Dict[str, str]:
     """Endpoint to clear the knowledge base."""
     try:
-        if request.app.state.vector_store is not None:
-            clear_hybrid_store(request.app.state.vector_store, app_config["vector_db"]["persist_directory"])
+        vector_store, bm25_retriever = get_lazy_hybrid_store()
+        if vector_store is not None:
+            clear_hybrid_store(vector_store, app_config["vector_db"]["persist_directory"])
             
-        if os.path.exists(UPLOAD_DIRECTORY):
-            shutil.rmtree(UPLOAD_DIRECTORY)
-            os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
+        # Delete from S3
+        delete_s3_bucket_contents()
             
-        request.app.state.vector_store, request.app.state.bm25_retriever = load_hybrid_store(
-            embedding_model=request.app.state.embedding_model,
-            persist_dir=app_config["vector_db"]["persist_directory"],
-            index_name=app_config["vector_db"]["index_name"],
-        )
+        clear_global_store()
+        get_lazy_hybrid_store() # trigger reload
         
         return {"message": "Knowledge Base cleared successfully."}
     except Exception as e:
@@ -108,8 +131,9 @@ async def clear_kb(request: Request) -> Dict[str, str]:
 @api_router.get("/api/health")
 async def health_check(request: Request) -> Dict[str, Any]:
     """Endpoint to check the health status of the API."""
+    from app.core.dependencies import _embedding_model, _vector_store
     return {
         "status": "healthy",
-        "models_loaded": request.app.state.embedding_model is not None,
-        "kb_ready": request.app.state.vector_store is not None
+        "models_loaded": _embedding_model is not None,
+        "kb_ready": _vector_store is not None
     }
