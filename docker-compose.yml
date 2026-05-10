@@ -137,3 +137,4 @@ volumes:
   pgdata:
   miniodata:
   redisdata:
+  esdata:

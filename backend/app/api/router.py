@@ -17,18 +17,21 @@ from app.core.dependencies import (
     get_lazy_embedding_model,
     get_lazy_hybrid_store,
     get_lazy_reranker,
-    clear_global_store
+    clear_global_store,
+    get_current_tenant_id
 )
 from app.services.s3_service import upload_file_to_s3, delete_s3_bucket_contents
+from app.api.auth import router as auth_router
 
 logger = logging.getLogger(__name__)
 
 api_router = APIRouter()
+api_router.include_router(auth_router)
 app_config = load_config()
 
 
 @api_router.post("/api/chat")
-async def chat_endpoint(request: Request, body: ChatRequest) -> Dict[str, Any]:
+async def chat_endpoint(request: Request, body: ChatRequest, tenant_id: str = Depends(get_current_tenant_id)) -> Dict[str, Any]:
     """Endpoint to handle user queries and generate answers."""
     try:
         vector_store, bm25_retriever = get_lazy_hybrid_store()
@@ -39,7 +42,8 @@ async def chat_endpoint(request: Request, body: ChatRequest) -> Dict[str, Any]:
             chat_history=body.chat_history,
             vector_store=vector_store,
             bm25_retriever=bm25_retriever,
-            reranker=reranker
+            reranker=reranker,
+            tenant_id=tenant_id
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -49,7 +53,7 @@ async def chat_endpoint(request: Request, body: ChatRequest) -> Dict[str, Any]:
 
 
 @api_router.post("/api/upload")
-async def upload_document(request: Request, files: List[UploadFile] = File(...)) -> Dict[str, Any]:
+async def upload_document(request: Request, files: List[UploadFile] = File(...), tenant_id: str = Depends(get_current_tenant_id)) -> Dict[str, Any]:
     """Endpoint to handle document uploads and trigger asynchronous ingestion."""
     from app.tasks import ingest_documents_task
     
@@ -73,7 +77,7 @@ async def upload_document(request: Request, files: List[UploadFile] = File(...))
         
     try:
         # Trigger Celery Task
-        task = ingest_documents_task.delay(saved_filenames)
+        task = ingest_documents_task.delay(saved_filenames, tenant_id)
         
         return {
             "message": "Ingestion started",
@@ -86,7 +90,7 @@ async def upload_document(request: Request, files: List[UploadFile] = File(...))
 
 
 @api_router.get("/api/tasks/{task_id}")
-async def get_task_status(task_id: str) -> Dict[str, Any]:
+async def get_task_status(task_id: str, tenant_id: str = Depends(get_current_tenant_id)) -> Dict[str, Any]:
     """Endpoint to check the status of a Celery task."""
     from app.core.celery_app import celery_app
     from celery.result import AsyncResult
@@ -109,15 +113,16 @@ async def get_task_status(task_id: str) -> Dict[str, Any]:
 
 
 @api_router.post("/api/clear")
-async def clear_kb(request: Request) -> Dict[str, str]:
+async def clear_kb(request: Request, tenant_id: str = Depends(get_current_tenant_id)) -> Dict[str, str]:
     """Endpoint to clear the knowledge base."""
     try:
         vector_store, bm25_retriever = get_lazy_hybrid_store()
         if vector_store is not None:
-            clear_hybrid_store(vector_store, app_config["vector_db"]["persist_directory"])
+            clear_hybrid_store(vector_store, app_config["vector_db"]["persist_directory"], tenant_id=tenant_id)
             
-        # Delete from S3
-        delete_s3_bucket_contents()
+        # Optional: We could also scope S3 deletions to tenant if needed
+        # For now, just keep S3 delete globally or scoped if needed.
+        # delete_s3_bucket_contents()
             
         clear_global_store()
         get_lazy_hybrid_store() # trigger reload

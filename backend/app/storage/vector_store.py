@@ -2,8 +2,7 @@
 
 import logging
 import os
-import shutil
-from typing import List, Tuple, Optional, Any
+from typing import List, Tuple, Any, Optional
 
 from elasticsearch import Elasticsearch, helpers
 from langchain_core.documents import Document
@@ -39,7 +38,11 @@ class ElasticsearchBM25Retriever:
                     "mappings": {
                         "properties": {
                             "page_content": {"type": "text", "analyzer": "standard"},
-                            "metadata": {"type": "object", "enabled": True}
+                            "metadata": {
+                                "properties": {
+                                    "tenant_id": {"type": "keyword"}
+                                }
+                            }
                         }
                     }
                 }
@@ -60,14 +63,18 @@ class ElasticsearchBM25Retriever:
         helpers.bulk(self.client, actions)
         self.client.indices.refresh(index=self.index_name)
         
-    def invoke(self, query: str, top_k: int = 5) -> List[Document]:
+    def invoke(self, query: str, top_k: int = 5, tenant_id: Optional[str] = None) -> List[Document]:
         if not self.client.indices.exists(index=self.index_name):
             return []
             
+        must_clauses: List[dict] = [{"match": {"page_content": query}}]
+        if tenant_id:
+            must_clauses.append({"term": {"metadata.tenant_id": tenant_id}})
+            
         body = {
             "query": {
-                "match": {
-                    "page_content": query
+                "bool": {
+                    "must": must_clauses
                 }
             },
             "size": top_k
@@ -121,20 +128,28 @@ def load_hybrid_store(
     return vector_store, bm25_retriever
 
 
-def clear_hybrid_store(vectorstore: PineconeVectorStore, persist_dir: str) -> None:
-    """Clear all vectors from Pinecone and Elasticsearch."""
-    logger.info("Clearing Knowledge Base: Vector database and BM25.")
+def clear_hybrid_store(vectorstore: PineconeVectorStore, persist_dir: str, tenant_id: str) -> None:
+    """Clear all vectors from Pinecone and Elasticsearch for a specific tenant."""
+    logger.info(f"Clearing Knowledge Base for tenant: {tenant_id}.")
     
     try:
-        vectorstore.delete(delete_all=True)
-        logger.info("Deleted all vectors from Pinecone.")
+        # Pinecone delete with metadata filter
+        vectorstore.delete(filter={"tenant_id": {"$eq": tenant_id}})
+        logger.info("Deleted tenant vectors from Pinecone.")
     except Exception as exception:
         logger.error("Failed to delete from Pinecone: %s", exception)
 
     try:
         es = get_es_client()
-        # Delete all indices that look like bm25 indices
-        es.indices.delete(index="*_bm25", ignore_unavailable=True)
-        logger.info("Cleared Elasticsearch BM25 index.")
+        es.delete_by_query(
+            index="*_bm25",
+            body={
+                "query": {
+                    "term": {"metadata.tenant_id": tenant_id}
+                }
+            },
+            ignore_unavailable=True
+        )
+        logger.info("Cleared Elasticsearch BM25 index for tenant.")
     except Exception as exception:
         logger.error("Failed to clear Elasticsearch: %s", exception)

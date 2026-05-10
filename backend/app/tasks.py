@@ -14,11 +14,12 @@ logger = logging.getLogger(__name__)
 app_config = load_config()
 
 @celery_app.task(name="app.tasks.ingest_documents")
-def ingest_documents_task(filenames: list[str]) -> dict:
+def ingest_documents_task(filenames: list[str], tenant_id: str = None) -> dict:
     """Celery task to ingest documents asynchronously.
     
     Args:
         filenames: List of filenames stored in S3.
+        tenant_id: Organization ID for isolation.
         
     Returns:
         dict: A summary of the ingestion process.
@@ -50,7 +51,8 @@ def ingest_documents_task(filenames: list[str]) -> dict:
             index_name=app_config["vector_db"]["index_name"],
             persist_dir=app_config["vector_db"]["persist_directory"],
             chunk_size=app_config["ingestion"]["chunk_size"],
-            chunk_overlap=app_config["ingestion"]["chunk_overlap"]
+            chunk_overlap=app_config["ingestion"]["chunk_overlap"],
+            tenant_id=tenant_id
         )
         
         logger.info(f"Ingestion successful: {total_indexed_chunks} chunks in {ingestion_time}s.")

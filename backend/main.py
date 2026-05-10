@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 
 from app.api.router import api_router
 from app.core.config import load_config
+from app.core.database import engine
+from app.models.domain import Base
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -19,6 +21,8 @@ app_config = load_config()
 @asynccontextmanager
 async def lifespan(fastapi_app: FastAPI):
     """Lifespan events for FastAPI."""
+    logger.info("Initializing database schema...")
+    Base.metadata.create_all(bind=engine)
     logger.info("Application starting up... Models will be lazy-loaded on first request.")
     yield
     logger.info("Application shutting down...")

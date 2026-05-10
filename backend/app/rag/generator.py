@@ -147,7 +147,8 @@ def generate_answer(
     bm25_retriever: Optional[BM25Retriever],
     chat_history: str = "",
     reranker: Optional[CrossEncoder] = None,
+    tenant_id: Optional[str] = None,
 ) -> Tuple[str, List[Document], List[Tuple[AgentAction, str]]]:
-    hybrid_retriever = HybridRetriever(vectorstore, bm25_retriever, reranker)
+    hybrid_retriever = HybridRetriever(vectorstore, bm25_retriever, reranker, tenant_id=tenant_id)
     rag_agent = RAGAgent(hybrid_retriever)
     return rag_agent.generate(query, chat_history)

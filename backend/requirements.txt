@@ -31,3 +31,8 @@ asyncpg
 celery
 redis
 elasticsearch
+pydantic[email]
+bcrypt==4.0.1
+passlib[bcrypt]
+python-jose[cryptography]
+alembic

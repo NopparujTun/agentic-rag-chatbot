@@ -51,6 +51,7 @@ def chunk_documents(
     documents: List[Document],
     chunk_size: int,
     chunk_overlap: int,
+    tenant_id: str = None,
 ) -> List[Document]:
     """Split documents into smaller, overlapping chunks for embedding.
 
@@ -58,12 +59,15 @@ def chunk_documents(
         documents: A list of LangChain Document objects to split.
         chunk_size: Maximum character count per chunk.
         chunk_overlap: Number of overlapping characters between chunks.
+        tenant_id: Optional tenant identifier.
 
     Returns:
         A list of chunked Document objects.
     """
     for document in documents:
         document.page_content = clean_pdf_text(document.page_content)
+        if tenant_id:
+            document.metadata["tenant_id"] = tenant_id
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -133,6 +137,7 @@ def run_ingestion_pipeline(
     persist_dir: str,
     chunk_size: int = 1000,
     chunk_overlap: int = 200,
+    tenant_id: str = None,
 ) -> Tuple[PineconeVectorStore, BM25Retriever, int, float]:
     """Process files from paths and index them into the hybrid store.
 
@@ -143,6 +148,7 @@ def run_ingestion_pipeline(
         persist_dir: The directory to persist local data like BM25.
         chunk_size: The character limit per text chunk.
         chunk_overlap: The overlap size between text chunks.
+        tenant_id: Optional tenant identifier.
 
     Returns:
         A tuple containing the initialized VectorStore, BM25Retriever, 
@@ -157,7 +163,7 @@ def run_ingestion_pipeline(
     for path in file_paths:
         all_documents.extend(process_uploaded_file_path(path))
 
-    chunked_documents = chunk_documents(all_documents, chunk_size, chunk_overlap)
+    chunked_documents = chunk_documents(all_documents, chunk_size, chunk_overlap, tenant_id=tenant_id)
     if not chunked_documents:
         raise ValueError("No text found in the provided documents.")
 

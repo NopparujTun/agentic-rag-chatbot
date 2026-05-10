@@ -11,7 +11,8 @@ def process_chat(
     chat_history: str,
     vector_store: Any,
     bm25_retriever: Any,
-    reranker: Any
+    reranker: Any,
+    tenant_id: str,
 ) -> Dict[str, Any]:
     """Encapsulates the business logic for the chat operation."""
     if vector_store is None:
@@ -23,7 +24,8 @@ def process_chat(
         vectorstore=vector_store,
         bm25_retriever=bm25_retriever,
         chat_history=chat_history,
-        reranker=reranker
+        reranker=reranker,
+        tenant_id=tenant_id
     )
     response_time = time.time() - start_time
     

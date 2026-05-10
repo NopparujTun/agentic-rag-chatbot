@@ -38,11 +38,13 @@ class HybridRetriever:
         bm25_retriever: Optional[Any] = None,
         reranker: Optional[CrossEncoder] = None,
         rrf_k: int = DEFAULT_RRF_K,
+        tenant_id: Optional[str] = None,
     ):
         self.vectorstore = vectorstore
         self.bm25_retriever = bm25_retriever
         self.reranker = reranker
         self.rrf_k = rrf_k
+        self.tenant_id = tenant_id
 
     def search(
         self,
@@ -50,12 +52,14 @@ class HybridRetriever:
         k: int = 3,
         fetch_k: int = 8,
     ) -> List[Document]:
+        filter_dict = {"tenant_id": {"$eq": self.tenant_id}} if self.tenant_id else None
+        
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future_vector = executor.submit(self.vectorstore.similarity_search, query, k=fetch_k)
+            future_vector = executor.submit(self.vectorstore.similarity_search, query, k=fetch_k, filter=filter_dict)
             
             if self.bm25_retriever is not None:
                 # Custom Elasticsearch BM25 Retriever
-                future_bm25 = executor.submit(self.bm25_retriever.invoke, query, top_k=fetch_k)
+                future_bm25 = executor.submit(self.bm25_retriever.invoke, query=query, top_k=fetch_k, tenant_id=self.tenant_id)
             else:
                 future_bm25 = None
             

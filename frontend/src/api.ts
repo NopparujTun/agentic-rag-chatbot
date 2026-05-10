@@ -24,6 +24,14 @@ export interface UploadResponse {
   files_processed: string[];
 }
 
+const getHeaders = (baseHeaders: Record<string, string> = {}) => {
+  const token = localStorage.getItem("token");
+  return {
+    ...baseHeaders,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
+
 async function parseResponse<T>(response: Response): Promise<T> {
   const payload = await response.json().catch(() => null);
 
@@ -41,9 +49,9 @@ async function parseResponse<T>(response: Response): Promise<T> {
 export async function sendChatMessage(query: string, chatHistory: string) {
   const response = await fetch('/api/chat', {
     method: 'POST',
-    headers: {
+    headers: getHeaders({
       'Content-Type': 'application/json',
-    },
+    }),
     body: JSON.stringify({ query, chat_history: chatHistory }),
   });
 
@@ -59,6 +67,7 @@ export async function uploadDocuments(files: FileList) {
 
   const response = await fetch('/api/upload', {
     method: 'POST',
+    headers: getHeaders(),
     body: formData,
   });
 
@@ -68,6 +77,7 @@ export async function uploadDocuments(files: FileList) {
 export async function clearKnowledgeBase() {
   const response = await fetch('/api/clear', {
     method: 'POST',
+    headers: getHeaders(),
   });
 
   return parseResponse<{ message: string }>(response);
