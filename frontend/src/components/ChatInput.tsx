@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { InputBar } from './ui/input-bar';
+import { useRef } from "react";
+import { InputBar } from "./ui/input-bar";
 
 interface ChatInputProps {
   isSending: boolean;
@@ -7,14 +7,10 @@ interface ChatInputProps {
   onUploadDocuments: (files: FileList) => void;
 }
 
-export default function ChatInput({
-  isSending,
-  onSendMessage,
-  onUploadDocuments,
-}: ChatInputProps) {
+export default function ChatInput({ isSending, onSendMessage, onUploadDocuments }: ChatInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSend = (message: { role: 'user'; content: string }) => {
+  const handleSend = (message: { role: "user"; content: string }) => {
     onSendMessage(message.content);
   };
 
@@ -26,7 +22,7 @@ export default function ChatInput({
     if (event.target.files && event.target.files.length > 0) {
       onUploadDocuments(event.target.files);
     }
-    event.target.value = '';
+    event.target.value = "";
   };
 
   return (

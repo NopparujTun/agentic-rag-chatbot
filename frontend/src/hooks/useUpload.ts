@@ -14,13 +14,14 @@ export function useUpload() {
     try {
       const response = await uploadDocuments(files);
       const fileList = response.files_processed.join(", ");
-      setStatus(`Uploaded ${response.files_processed.length} file(s)`);
+
+      setStatus(`Processing ${response.files_processed.length} file(s) in the background`);
       setMessages((current) => [
         ...current,
         {
           id: Date.now(),
           role: "system" as const,
-          content: `${response.message}: ${fileList}. Indexed ${response.total_chunks} chunks.`,
+          content: `Upload complete for: ${fileList}. Ingestion is running in the background; the knowledge base will refresh when processing finishes.`,
         },
       ]);
     } catch (error) {

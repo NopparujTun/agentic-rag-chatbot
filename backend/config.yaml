@@ -10,5 +10,4 @@ embedding:
 
 # Vector database storage settings
 vector_db:
-  persist_directory: "./local_bm25_data"
   index_name: "main"

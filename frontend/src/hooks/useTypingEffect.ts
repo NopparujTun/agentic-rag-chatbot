@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 export function useTypingEffect(
   text: string,
@@ -6,23 +6,27 @@ export function useTypingEffect(
   minSpeedMs: number = 5,
   maxSpeedMs: number = 25
 ) {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const timeoutRef = useRef<number | null>(null);
   const currentIndex = useRef(0);
 
   useEffect(() => {
     if (!enabled || !text) {
-      setDisplayedText(text || '');
-      setIsTyping(false);
+      const t = setTimeout(() => {
+        setDisplayedText(text || "");
+        setIsTyping(false);
+      }, 0);
       // Reset index if completely disabled or empty
       if (!text) {
         currentIndex.current = 0;
       }
-      return;
+      return () => clearTimeout(t);
     }
 
-    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(true);
+    }, 0);
 
     const typeCharacter = () => {
       if (currentIndex.current < text.length) {
@@ -57,8 +61,11 @@ export function useTypingEffect(
   // Reset when text completely changes (not just appended) or when component unmounts
   useEffect(() => {
     if (enabled && text && !text.startsWith(displayedText)) {
-       currentIndex.current = 0;
-       setDisplayedText('');
+      currentIndex.current = 0;
+      const t = setTimeout(() => {
+        setDisplayedText("");
+      }, 0);
+      return () => clearTimeout(t);
     }
   }, [text, enabled, displayedText]);
 

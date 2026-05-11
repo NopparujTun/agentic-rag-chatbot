@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  memo,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-  type ReactNode,
-} from "react";
+import { memo, useState, useCallback, useRef, useEffect, type ReactNode } from "react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -83,13 +76,7 @@ const SendIcon = ({ className = "w-[14px] h-[14px]" }) => (
 );
 
 const StopIcon = ({ className = "w-[12px] h-[12px]" }) => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-  >
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className={className}>
     <rect x="6" y="6" width="12" height="12" rx="1" />
   </svg>
 );
@@ -128,13 +115,7 @@ const FileIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
-function AttachmentButton({
-  onClick,
-  disabled,
-}: {
-  onClick: () => void;
-  disabled?: boolean;
-}) {
+function AttachmentButton({ onClick, disabled }: { onClick: () => void; disabled?: boolean }) {
   return (
     <button
       type="button"
@@ -164,9 +145,7 @@ function SendButton({
       aria-label={isStreaming ? "Stop" : "Send"}
       className={cn(
         "inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-150",
-        isActive
-          ? "bg-neutral-900 text-white"
-          : "bg-neutral-200 text-neutral-400",
+        isActive ? "bg-neutral-900 text-white" : "bg-neutral-200 text-neutral-400"
       )}
     >
       {isStreaming ? <StopIcon /> : <SendIcon />}
@@ -174,13 +153,7 @@ function SendButton({
   );
 }
 
-function ImageChip({
-  url,
-  onRemove,
-}: {
-  url: string;
-  onRemove?: () => void;
-}) {
+function ImageChip({ url, onRemove }: { url: string; onRemove?: () => void }) {
   return (
     <div className="relative w-12 h-12 rounded-md overflow-hidden bg-neutral-100 group">
       <img src={url} alt="" className="w-full h-full object-cover" />
@@ -224,11 +197,7 @@ function FileChip({
         <span className="text-xs font-medium truncate text-neutral-900 max-w-[140px]">
           {filename}
         </span>
-        {sizeText && (
-          <span className="text-[10px] text-neutral-500">
-            {sizeText}
-          </span>
-        )}
+        {sizeText && <span className="text-[10px] text-neutral-500">{sizeText}</span>}
       </div>
       {onRemove && (
         <button
@@ -270,14 +239,13 @@ export const InputBar = memo(function InputBar({
       if (isControlled) controlledOnChange?.(v);
       else setInternalInput(v);
     },
-    [isControlled, controlledOnChange],
+    [isControlled, controlledOnChange]
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const isStreaming = status === "streaming" || status === "submitted";
   const hasInput = input.trim().length > 0;
-  const hasContextItems =
-    attachedImages.length > 0 || attachedFiles.length > 0;
+  const hasContextItems = attachedImages.length > 0 || attachedFiles.length > 0;
 
   useEffect(() => {
     const el = textareaRef.current;
@@ -307,14 +275,11 @@ export const InputBar = memo(function InputBar({
         handleSubmit();
       }
     },
-    [handleSubmit],
+    [handleSubmit]
   );
 
   const handleContainerClick = useCallback((e: React.MouseEvent) => {
-    if (
-      e.target === e.currentTarget ||
-      !(e.target as HTMLElement).closest("button, textarea")
-    ) {
+    if (e.target === e.currentTarget || !(e.target as HTMLElement).closest("button, textarea")) {
       textareaRef.current?.focus();
     }
   }, []);
@@ -335,7 +300,7 @@ export const InputBar = memo(function InputBar({
           <div
             className={cn(
               "grid transition-[grid-template-rows] duration-200 ease-out",
-              hasContextItems ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+              hasContextItems ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
             )}
           >
             <div className="overflow-hidden">
@@ -345,9 +310,7 @@ export const InputBar = memo(function InputBar({
                     <ImageChip
                       key={img.id}
                       url={img.url}
-                      onRemove={
-                        onRemoveImage ? () => onRemoveImage(img.id) : undefined
-                      }
+                      onRemove={onRemoveImage ? () => onRemoveImage(img.id) : undefined}
                     />
                   ))}
                   {attachedFiles.map((file) => (
@@ -355,9 +318,7 @@ export const InputBar = memo(function InputBar({
                       key={file.id}
                       filename={file.filename}
                       size={file.size}
-                      onRemove={
-                        onRemoveFile ? () => onRemoveFile(file.id) : undefined
-                      }
+                      onRemove={onRemoveFile ? () => onRemoveFile(file.id) : undefined}
                     />
                   ))}
                 </div>
@@ -376,15 +337,13 @@ export const InputBar = memo(function InputBar({
               className={cn(
                 "w-full resize-none bg-transparent border-0 outline-none text-[14px] leading-[1.6] text-neutral-900 placeholder:text-neutral-400:text-neutral-500",
                 "overflow-hidden",
-                disabled && "opacity-50 cursor-not-allowed",
+                disabled && "opacity-50 cursor-not-allowed"
               )}
             />
           </div>
           <div className="flex items-center justify-between gap-3 px-2 pt-1 pb-2">
             <div className="flex items-center gap-1 min-w-0">
-              {onAttach && (
-                <AttachmentButton onClick={onAttach} disabled={disabled} />
-              )}
+              {onAttach && <AttachmentButton onClick={onAttach} disabled={disabled} />}
               {leftActions}
             </div>
             <div className="flex items-center gap-1">

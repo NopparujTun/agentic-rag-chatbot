@@ -120,7 +120,6 @@ def convert_complex_pdfs_vlm(pdf_path: str, api_key: str, model_name: str = "gem
         The extracted markdown string.
     """
     from google import genai
-    from google.genai import types
 
     gemini_client = genai.Client(api_key=api_key)
     pdf_document = fitz.open(pdf_path)

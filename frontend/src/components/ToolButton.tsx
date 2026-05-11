@@ -6,7 +6,8 @@ interface ToolButtonProps {
 
 export default function ToolButton({ emoji, label, badge }: ToolButtonProps) {
   return (
-    <button className="
+    <button
+      className="
       flex items-center gap-2 px-4 py-2 rounded-full
       bg-white border border-[#e5e5e5]
       text-[#1a1a1a] text-sm font-medium
@@ -14,7 +15,8 @@ export default function ToolButton({ emoji, label, badge }: ToolButtonProps) {
       active:scale-95
       transition-all duration-150 cursor-pointer
       whitespace-nowrap
-    ">
+    "
+    >
       <span className="text-base leading-none">{emoji}</span>
       <span>{label}</span>
       {badge && (

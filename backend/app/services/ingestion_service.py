@@ -14,11 +14,10 @@ from typing import List, Tuple
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_pinecone import PineconeVectorStore
-from langchain_community.retrievers import BM25Retriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.services.pdf_processor import process_file
-from app.storage.vector_store import save_hybrid_store
+from app.storage.vector_store import save_vector_store
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +50,6 @@ def chunk_documents(
     documents: List[Document],
     chunk_size: int,
     chunk_overlap: int,
-    tenant_id: str = None,
 ) -> List[Document]:
     """Split documents into smaller, overlapping chunks for embedding.
 
@@ -59,15 +57,11 @@ def chunk_documents(
         documents: A list of LangChain Document objects to split.
         chunk_size: Maximum character count per chunk.
         chunk_overlap: Number of overlapping characters between chunks.
-        tenant_id: Optional tenant identifier.
-
     Returns:
         A list of chunked Document objects.
     """
     for document in documents:
         document.page_content = clean_pdf_text(document.page_content)
-        if tenant_id:
-            document.metadata["tenant_id"] = tenant_id
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -134,25 +128,21 @@ def run_ingestion_pipeline(
     file_paths: List[str],
     embedding_model: Embeddings,
     index_name: str,
-    persist_dir: str,
     chunk_size: int = 1000,
     chunk_overlap: int = 200,
-    tenant_id: str = None,
-) -> Tuple[PineconeVectorStore, BM25Retriever, int, float]:
-    """Process files from paths and index them into the hybrid store.
+) -> Tuple[PineconeVectorStore, int, float]:
+    """Process files from paths and index them into Pinecone.
 
     Args:
         file_paths: A list of paths to the files to ingest.
         embedding_model: The Pinecone Embeddings model to use.
         index_name: The name of the Pinecone index.
-        persist_dir: The directory to persist local data like BM25.
         chunk_size: The character limit per text chunk.
         chunk_overlap: The overlap size between text chunks.
-        tenant_id: Optional tenant identifier.
 
     Returns:
-        A tuple containing the initialized VectorStore, BM25Retriever, 
-        total chunks indexed, and total time taken in seconds.
+        A tuple containing the initialized vector store, total chunks indexed,
+        and total time taken in seconds.
 
     Raises:
         ValueError: If no text was successfully extracted and chunked.
@@ -163,16 +153,65 @@ def run_ingestion_pipeline(
     for path in file_paths:
         all_documents.extend(process_uploaded_file_path(path))
 
-    chunked_documents = chunk_documents(all_documents, chunk_size, chunk_overlap, tenant_id=tenant_id)
+    chunked_documents = chunk_documents(all_documents, chunk_size, chunk_overlap)
     if not chunked_documents:
         raise ValueError("No text found in the provided documents.")
 
-    vector_store, bm25_retriever = save_hybrid_store(
+    vector_store = save_vector_store(
         chunks=chunked_documents,
         embedding_model=embedding_model,
-        persist_dir=persist_dir,
         index_name=index_name,
     )
 
     ingestion_duration = time.time() - start_time
-    return vector_store, bm25_retriever, len(chunked_documents), ingestion_duration
+    return vector_store, len(chunked_documents), ingestion_duration
+
+
+def run_ingestion_background(filenames: list) -> None:
+    """Background task that downloads files from S3, runs ingestion, and reloads the store.
+
+    Designed to be registered with FastAPI ``BackgroundTasks`` — replaces the
+    previous Celery ``ingest_documents_task``.
+
+    Args:
+        filenames: List of filenames already uploaded to S3.
+    """
+    import shutil
+    import tempfile
+
+    from app.core.dependencies import get_lazy_embedding_model, clear_global_store
+    from app.core.config import load_config
+    from app.services.s3_service import download_file_from_s3
+
+    logger.info("Background ingestion started for %d file(s).", len(filenames))
+    app_config = load_config()
+    temp_dir = tempfile.mkdtemp()
+
+    try:
+        local_paths = []
+        for filename in filenames:
+            local_path = os.path.join(temp_dir, filename)
+            download_file_from_s3(filename, local_path)
+            local_paths.append(local_path)
+
+        embedding_model = get_lazy_embedding_model()
+
+        _, total_chunks, duration = run_ingestion_pipeline(
+            file_paths=local_paths,
+            embedding_model=embedding_model,
+            index_name=app_config["vector_db"]["index_name"],
+            chunk_size=app_config["ingestion"]["chunk_size"],
+            chunk_overlap=app_config["ingestion"]["chunk_overlap"],
+        )
+
+        # Force the next request to reload the updated store from disk/Pinecone
+        clear_global_store()
+        logger.info(
+            "Background ingestion complete: %d chunks in %.2fs. Store reloaded.",
+            total_chunks,
+            duration,
+        )
+    except Exception as exc:
+        logger.error("Background ingestion failed: %s", exc)
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)

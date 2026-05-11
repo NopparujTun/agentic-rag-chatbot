@@ -1,5 +1,5 @@
-import ChatInput from './ChatInput';
-import HeroSection from './HeroSection';
+import ChatInput from "./ChatInput";
+import HeroSection from "./HeroSection";
 
 interface HomePageProps {
   isSending: boolean;

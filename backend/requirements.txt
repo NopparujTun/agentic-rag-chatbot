@@ -13,7 +13,6 @@ langgraph
 pinecone
 sentence-transformers
 pypdf
-rank_bm25
 pyyaml
 python-dotenv
 pythainlp
@@ -23,16 +22,6 @@ pymupdf4llm
 docling
 google-genai
 Pillow
-# Infrastructure evolution dependencies
 boto3
-sqlalchemy
-psycopg2-binary
-asyncpg
-celery
-redis
-elasticsearch
 pydantic[email]
-bcrypt==4.0.1
-passlib[bcrypt]
-python-jose[cryptography]
-alembic
+structlog

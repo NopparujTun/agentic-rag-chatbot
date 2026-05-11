@@ -1,8 +1,7 @@
-"""Hybrid vector + keyword store with Reciprocal Rank Fusion (RRF) and Re-ranking."""
+"""Pinecone retrieval with optional Cross-Encoder re-ranking."""
 
-import concurrent.futures
 import logging
-from typing import Dict, List, Optional, Any
+from typing import List, Optional
 
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
@@ -10,10 +9,6 @@ from langchain_pinecone import PineconeVectorStore, PineconeEmbeddings
 from sentence_transformers import CrossEncoder
 
 logger = logging.getLogger(__name__)
-
-# RRF smoothing constant (standard value from the original RRF paper).
-DEFAULT_RRF_K = 60
-
 
 def get_embedding_model(model_name: str, device: str) -> Embeddings:
     """Load and return a Pinecone embedding model."""
@@ -29,22 +24,16 @@ def get_reranker(model_name: str = "BAAI/bge-reranker-v2-m3", device: str = "cpu
     return CrossEncoder(model_name, max_length=512, device=device)
 
 
-class HybridRetriever:
-    """A managed hybrid retriever combining dense and sparse search."""
+class PineconeRetriever:
+    """A managed Pinecone retriever with optional precision re-ranking."""
 
     def __init__(
         self,
         vectorstore: PineconeVectorStore,
-        bm25_retriever: Optional[Any] = None,
         reranker: Optional[CrossEncoder] = None,
-        rrf_k: int = DEFAULT_RRF_K,
-        tenant_id: Optional[str] = None,
     ):
         self.vectorstore = vectorstore
-        self.bm25_retriever = bm25_retriever
         self.reranker = reranker
-        self.rrf_k = rrf_k
-        self.tenant_id = tenant_id
 
     def search(
         self,
@@ -52,50 +41,12 @@ class HybridRetriever:
         k: int = 3,
         fetch_k: int = 8,
     ) -> List[Document]:
-        filter_dict = {"tenant_id": {"$eq": self.tenant_id}} if self.tenant_id else None
-        
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future_vector = executor.submit(self.vectorstore.similarity_search, query, k=fetch_k, filter=filter_dict)
-            
-            if self.bm25_retriever is not None:
-                # Custom Elasticsearch BM25 Retriever
-                future_bm25 = executor.submit(self.bm25_retriever.invoke, query=query, top_k=fetch_k, tenant_id=self.tenant_id)
-            else:
-                future_bm25 = None
-            
-            vector_documents = future_vector.result()
-            bm25_documents = future_bm25.result() if future_bm25 else []
+        documents = self.vectorstore.similarity_search(query, k=fetch_k)
 
-        if not bm25_documents:
-            fused_documents = vector_documents
-        else:
-            fused_documents = self._apply_rrf(vector_documents, bm25_documents, fetch_k)
+        if self.reranker is not None and documents:
+            documents = self._apply_reranking(query, documents)
 
-        if self.reranker is not None and fused_documents:
-            fused_documents = self._apply_reranking(query, fused_documents)
-
-        return fused_documents[:k]
-
-    def _apply_rrf(
-        self, 
-        vector_docs: List[Document], 
-        bm25_docs: List[Document], 
-        fetch_k: int
-    ) -> List[Document]:
-        document_scores: Dict[str, float] = {}
-        document_mapping: Dict[str, Document] = {}
-
-        def _compute_rrf(retrieved_docs: List[Document]) -> None:
-            for rank_index, document in enumerate(retrieved_docs):
-                content = document.page_content
-                document_mapping[content] = document
-                document_scores[content] = document_scores.get(content, 0.0) + (1.0 / (rank_index + 1 + self.rrf_k))
-
-        _compute_rrf(vector_docs)
-        _compute_rrf(bm25_docs)
-
-        sorted_results = sorted(document_scores.items(), key=lambda item: item[1], reverse=True)
-        return [document_mapping[content] for content, _ in sorted_results[:fetch_k]]
+        return documents[:k]
 
     def _apply_reranking(self, query: str, documents: List[Document]) -> List[Document]:
         query_document_pairs = [[query, document.page_content] for document in documents]

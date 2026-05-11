@@ -7,11 +7,11 @@ from typing import List, Set
 from langchain_core.tools import tool
 from langchain_core.documents import Document
 
-from app.rag.retriever import HybridRetriever
+from app.rag.retriever import PineconeRetriever
 
 logger = logging.getLogger(__name__)
 
-def create_search_tool(retriever: HybridRetriever, retrieved_documents: List[Document], seen_document_contents: Set[str]):
+def create_search_tool(retriever: PineconeRetriever, retrieved_documents: List[Document], seen_document_contents: Set[str]):
     """Create a bounded search tool that updates the provided state collections."""
     
     @tool

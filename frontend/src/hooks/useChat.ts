@@ -44,7 +44,7 @@ export function useChat() {
       content: trimmed,
     };
 
-    setMessages((current) => isStartingFromHome ? [userMessage] : [...current, userMessage]);
+    setMessages((current) => (isStartingFromHome ? [userMessage] : [...current, userMessage]));
     setIsSending(true);
     setStatus("Thinking...");
 

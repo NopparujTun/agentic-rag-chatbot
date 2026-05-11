@@ -1,34 +1,33 @@
-"""Main application entry point for Enterprise Smart KB API."""
+"""Main application entry point for Agentic RAG Chatbot API."""
 
-import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+import structlog
 import uvicorn
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
 from app.core.config import load_config
-from app.core.database import engine
-from app.models.domain import Base
+from app.core.logger import setup_logger
 
 load_dotenv()
-logger = logging.getLogger(__name__)
+setup_logger()
+logger = structlog.get_logger()
 
 app_config = load_config()
+
 
 @asynccontextmanager
 async def lifespan(fastapi_app: FastAPI):
     """Lifespan events for FastAPI."""
-    logger.info("Initializing database schema...")
-    Base.metadata.create_all(bind=engine)
-    logger.info("Application starting up... Models will be lazy-loaded on first request.")
+    logger.info("Application starting up. Models will be lazy-loaded on first request.")
     yield
-    logger.info("Application shutting down...")
+    logger.info("Application shutting down.")
 
 
-app = FastAPI(title="Enterprise Smart KB API", lifespan=lifespan)
+app = FastAPI(title="Agentic RAG Chatbot API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
