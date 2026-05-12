@@ -3,7 +3,10 @@
  */
 export interface Source {
   content: string;
-  metadata: Record<string, unknown>;
+  metadata: {
+    source?: string;
+    [key: string]: unknown;
+  };
 }
 
 /**
