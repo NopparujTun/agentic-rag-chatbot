@@ -1,7 +1,7 @@
-<h1 align="center">Enterprise Smart Knowledge-Base</h1>
+<h1 align="center">Agentic RAG Chatbot</h1>
 
 <p align="center">
-  <strong>Agentic AI-powered Document Assistant with Hybrid Search (Semantic + Keyword), VLM PDF Extraction, and Thai NLP</strong>
+  <strong>Advanced AI-powered Document Assistant with Hybrid Search (Semantic + Keyword), VLM PDF Extraction, and Agentic Reasoning</strong>
 </p>
 
 <p align="center">
@@ -27,17 +27,17 @@
 
 ## 📖 Overview
 
-This repository provides a comprehensive implementation of an **Agentic RAG (Retrieval-Augmented Generation)** application built on a modern decoupled architecture. The system acts as a highly intelligent Knowledge Base assistant, capable of interpreting complex documents (PDFs, DOCX, TXT), understanding intricate queries, and delivering precise, source-backed answers.
+This repository provides a comprehensive implementation of an **Agentic RAG (Retrieval-Augmented Generation)** chatbot built on a modern decoupled architecture. The system acts as a highly intelligent document assistant, capable of interpreting complex documents (PDFs, DOCX, TXT), understanding intricate queries, and delivering precise, source-backed answers through autonomous reasoning.
 
-Unlike standard RAG tutorials, this project utilizes **Agentic Orchestration** via LangGraph, enabling the AI to evaluate context, iteratively search, and reason before responding. It features an advanced ingestion pipeline that handles complex, scanned, and image-heavy PDFs using **Vision-Language Models (VLM)**, and integrates a specialized **Thai Language NLP** pipeline for enhanced accuracy in Southeast Asian enterprise environments.
+Unlike standard RAG implementations, this project utilizes **Agentic Orchestration** via LangGraph, enabling the AI to evaluate context, iteratively search, and reason before responding. It features an advanced ingestion pipeline that handles complex, scanned, and image-heavy PDFs using **Vision-Language Models (VLM)**, ensuring that visual information is as searchable as text.
 
 ---
 
 ## ✨ Key Features
 
-### 🧠 Advanced AI & Agentic RAG
+### 🧠 Agentic Reasoning & RAG
 - **LangGraph ReAct Agent:** Uses a reasoning-and-acting (ReAct) loop to decide if retrieved context is sufficient. It can perform multiple searches iteratively to ensure accurate answers.
-- **OpenTyphoon Integration:** Powered by the state-of-the-art `typhoon-v2.5-30b-a3b-instruct` model, optimized for Thai and English reasoning.
+- **Autonomous Tool Use:** The chatbot intelligently decides when to search the knowledge base and how to refine its queries based on initial findings.
 - **Zero Hallucination Guardrails:** Strict prompt engineering ensures the agent only answers using retrieved context. If it cannot find the answer, it politely declines rather than guessing.
 
 ### 🔍 Hybrid Search & Retrieval
@@ -49,11 +49,11 @@ Unlike standard RAG tutorials, this project utilizes **Agentic Orchestration** v
 - **Intelligent PDF Routing:** Automatically detects PDF types (digital, scanned, image-heavy).
 - **VLM Extraction:** Uses **Gemini 2.5 Flash** to extract text, tables, and describe images/diagrams from visually complex PDFs.
 - **Docling & PyMuPDF:** Provides OCR for scanned documents and fast, high-fidelity markdown conversion for standard digital PDFs.
-- **Thai NLP Normalization:** Cleans text using `PyThaiNLP`, fixing broken vowels (e.g., ํา -> ำ) and enforcing proper English-Thai character boundaries.
+- **Thai NLP Normalization:** Specialized cleaning for Thai language text, fixing broken vowels and enforcing proper character boundaries.
 
 ### 💻 Modern Web UI
 - **React 19 & Vite 6:** Ultra-fast, highly responsive frontend architecture.
-- **Tailwind CSS v4:** Modern, utility-first styling for a sleek, enterprise-grade aesthetic.
+- **Tailwind CSS v4:** Modern, utility-first styling for a sleek, interactive aesthetic.
 - **Real-time Interaction:** Features chat history, markdown rendering, thinking indicators, and drag-and-drop document uploads.
 
 ---
@@ -66,7 +66,7 @@ The system is strictly decoupled into a RESTful Backend and an SPA Frontend.
 1. **Upload:** User drops files into the React UI (`/api/upload`).
 2. **Classification:** Backend evaluates if the file is a PDF (digital/scanned/image-heavy) or a text document.
 3. **Extraction:** Dispatches to the appropriate parser (PyMuPDF4LLM, Docling OCR, or Gemini VLM).
-4. **Processing & Cleaning:** Markdown text is passed through the Thai NLP cleaner.
+4. **Processing & Cleaning:** Markdown text is passed through the NLP cleaner.
 5. **Chunking:** Text is split using `RecursiveCharacterTextSplitter` (default: 1000 chars, 200 overlap).
 6. **Indexing:** Chunks are simultaneously embedded into Pinecone (Vector) and serialized into a local BM25 Pickle file.
 
@@ -88,7 +88,6 @@ The system is strictly decoupled into a RESTful Backend and an SPA Frontend.
 - **Vector Database:** Pinecone
 - **Embeddings & Ranking:** Sentence-Transformers, Rank BM25
 - **Document Processing:** Docling, PyMuPDF, PyMuPDF4LLM, fitz
-- **NLP:** PyThaiNLP
 
 ### Frontend Stack
 - **Framework:** React 19, TypeScript
@@ -114,11 +113,11 @@ backend/
     ├── models/
     │   └── schemas.py          # Pydantic schemas for request/response validation
     ├── rag/
-    │   ├── generator.py        # LangGraph ReAct Agent, OpenTyphoon integration, Prompt Engineering
+    │   ├── generator.py        # LangGraph ReAct Agent, OpenTyphoon/OpenAI integration
     │   └── retriever.py        # HybridRetriever class, RRF implementation, Cross-Encoder Reranker
     ├── services/
     │   ├── chat_service.py     # Chat business logic, formatting output
-    │   ├── ingestion_service.py# Chunking, Thai NLP text cleaning, indexing orchestration
+    │   ├── ingestion_service.py# Chunking, NLP text cleaning, indexing orchestration
     │   └── pdf_processor.py    # VLM Gemini extraction, Docling OCR, PyMuPDF parsing logic
     ├── storage/
     │   └── vector_store.py     # Pinecone and BM25 local storage management
@@ -186,8 +185,8 @@ Checks system status and model loading state.
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/enterprise-smart-kb.git
-cd enterprise-smart-kb
+git clone https://github.com/yourusername/agentic-rag-chatbot.git
+cd agentic-rag-chatbot
 ```
 
 ### 2. Backend Setup
@@ -236,7 +235,7 @@ Access the application at `http://localhost:5173`.
 
 ## 📊 Evaluation & Benchmarks
 
-The RAG pipeline has been rigorously evaluated against a custom ground-truth dataset comprising complex structural queries.
+The RAG pipeline has been rigorously evaluated against ground-truth datasets.
 
 - **Baseline Semantic Search:** 86.8% MRR@10
 - **BM25 Keyword Only:** 59.1% MRR@10
@@ -258,5 +257,5 @@ Average end-to-end response time for Hybrid retrieval is **~828 ms**, balancing 
 
 ---
 <p align="center">
-  <em>Built for highly accurate, enterprise-grade AI knowledge retrieval.</em>
+  <em>Built for autonomous, highly accurate AI knowledge retrieval.</em>
 </p>
