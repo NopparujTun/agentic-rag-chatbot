@@ -231,6 +231,16 @@ npm run dev
 ```
 Access the application at `http://localhost:5173`.
 
+### 4. Docker Deployment (Alternative)
+You can run the entire stack (Backend, Frontend, MinIO, PostgreSQL) via Docker Compose.
+
+```bash
+# Provide environment variables in backend/.env
+# Build and start all services
+docker-compose up --build -d
+```
+Access the frontend at `http://localhost:5173` and the MinIO console at `http://localhost:9001` (Credentials: minioadmin / minioadmin).
+
 ---
 
 ## 📊 Evaluation & Benchmarks
