@@ -63,11 +63,12 @@ export default function MessageItem({
         )}
 
         <div className={`flex flex-col gap-2 max-w-[85%] ${isUser ? "items-end" : "items-start"}`}>
-          {isThinking && !isUser ? (
+          {isThinking && !isUser && (
             <div className="py-1">
               <ThinkingIndicator step={thinkingStep} />
             </div>
-          ) : (
+          )}
+          {!isThinking && (
             <div
               className={`text-base leading-relaxed ${
                 isUser

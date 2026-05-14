@@ -52,10 +52,9 @@ async def upload_document(
     returns immediately while processing continues in the background.
     """
     saved_filenames = []
-    allowed_extensions = (".pdf", ".docx", ".txt")
 
     for uploaded_file in files:
-        if not uploaded_file.filename.lower().endswith(allowed_extensions):
+        if not uploaded_file.filename.lower().endswith(ALLOWED_EXTENSIONS):
             continue
 
         file_bytes = await uploaded_file.read()
@@ -66,7 +65,7 @@ async def upload_document(
     if not saved_filenames:
         raise HTTPException(
             status_code=400,
-            detail="No valid files provided. Allowed: PDF, DOCX, TXT.",
+            detail=ERROR_NO_VALID_FILES,
         )
 
     background_tasks.add_task(run_ingestion_background, saved_filenames)
@@ -98,6 +97,12 @@ async def clear_kb() -> Dict[str, str]:
 async def health_check() -> Dict[str, Any]:
     """Return the current health and readiness status of the API."""
     from app.core.dependencies import _embedding_model, _vector_store
+    return {
+        "status": "healthy",
+        "models_loaded": _embedding_model is not None,
+        "kb_ready": _vector_store is not None,
+    }
+re.dependencies import _embedding_model, _vector_store
     return {
         "status": "healthy",
         "models_loaded": _embedding_model is not None,

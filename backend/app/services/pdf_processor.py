@@ -14,6 +14,13 @@ from docling.document_converter import DocumentConverter
 
 logger = logging.getLogger(__name__)
 
+PDF_TYPE_SCANNED = 'scanned'
+PDF_TYPE_IMAGE_HEAVY = 'image_heavy'
+PDF_TYPE_DIGITAL = 'digital'
+TARGET_DPI = 300
+POINTS_PER_INCH = 72
+IMAGE_SCALE_FACTOR = 2.0
+
 SYSTEM_PROMPT = """You are an expert document parser specializing in converting PDF pages to markdown format.
 
 **Your task:**
@@ -161,7 +168,8 @@ def _process_single_page_vlm(
     page_number = page_index + 1
     try:
         pdf_page = pdf_document[page_index]
-        page_pixmap = pdf_page.get_pixmap(matrix=fitz.Matrix(300 / 72, 300 / 72))
+        matrix_scale = TARGET_DPI / POINTS_PER_INCH
+        page_pixmap = pdf_page.get_pixmap(matrix=fitz.Matrix(matrix_scale, matrix_scale))
         image_bytes = page_pixmap.tobytes("png")
 
         part_image = types.Part.from_bytes(data=image_bytes, mime_type="image/png")

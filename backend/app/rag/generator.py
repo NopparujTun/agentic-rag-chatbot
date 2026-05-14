@@ -104,7 +104,7 @@ class RAGAgent:
                 logger.error("All %d retries exhausted", self.max_retries)
                 return API_ERROR_MESSAGE, []
 
-            time.sleep(2 ** attempt)
+            time.sleep(BASE_RETRY_DELAY_SECONDS ** attempt)
             return None, []
 
     def generate(

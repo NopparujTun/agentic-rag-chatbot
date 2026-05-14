@@ -3,6 +3,8 @@ import type { ChangeEvent, DragEvent } from "react";
 import UploadDropzone from "./UploadDropzone";
 import UploadFileList from "./UploadFileList";
 
+const ALLOWED_EXTENSIONS = ["pdf", "docx", "txt"];
+
 interface UploadPageProps {
   onUpload: (files: FileList) => void;
   status: string;
@@ -43,7 +45,7 @@ export default function UploadPage({ onUpload, status }: UploadPageProps) {
   const handleFiles = (files: FileList) => {
     const validFiles = Array.from(files).filter((file) => {
       const ext = file.name.split(".").pop()?.toLowerCase();
-      return ext === "pdf" || ext === "docx" || ext === "txt";
+      return ext ? ALLOWED_EXTENSIONS.includes(ext) : false;
     });
     setSelectedFiles(validFiles);
   };
