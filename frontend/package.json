@@ -1,13 +1,18 @@
 {
-  "name": "frontend",
-  "private": true,
+  "name": "@mfa/frontend",
+  "private": "true",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "concurrently \"npm run dev:shell\" \"npm run dev:chat\" \"npm run dev:upload\"",
+    "dev:shell": "cd packages/shell && vite",
+    "dev:chat": "cd packages/chat && vite",
+    "dev:upload": "cd packages/upload && vite",
+    "build": "npm run build:shared && npm run build:chat && npm run build:upload && npm run build:shell",
+    "build:shared": "cd packages/shared && tsc",
+    "build:shell": "cd packages/shell && vite build",
+    "build:chat": "cd packages/chat && vite build",
+    "build:upload": "cd packages/upload && vite build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",
@@ -19,10 +24,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@originjs/vite-plugin-federation": "^1.4.1",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
@@ -31,5 +38,13 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10"
-  }
+  },
+  "description": "",
+  "main": "eslint.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/*"
+  ]
 }

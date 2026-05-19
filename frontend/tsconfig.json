@@ -1,7 +1,15 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+    { "path": "./packages/shared" },
+    { "path": "./packages/shell" },
+    { "path": "./packages/chat" },
+    { "path": "./packages/upload" }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@mfa/shared": ["./packages/shared/src"]
+    }
+  }
 }
