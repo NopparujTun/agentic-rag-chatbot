@@ -24,6 +24,7 @@ logger = structlog.get_logger()
 
 API_ERROR_MESSAGE = "ขออภัย ระบบประมวลผลหนาแน่น (API Error) กรุณาลองใหม่อีกครั้ง"
 INSUFFICIENT_INFO_MESSAGE = "ขออภัย ไม่พบข้อมูลในเอกสารอ้างอิง"
+BASE_RETRY_DELAY_SECONDS = 2
 
 
 class RAGAgent:
