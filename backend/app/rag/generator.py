@@ -64,23 +64,32 @@ class RAGAgent:
         """Retrieves the system message defining the agent's persona and rules."""
         return get_registrar_assistant_prompt()
 
+    def _get_observation(self, messages: List[Any], tool_call_id: str) -> str:
+        """Find the observation text for a specific tool call."""
+        for message in messages:
+            if isinstance(message, ToolMessage) and getattr(message, 'tool_call_id', '') == tool_call_id:
+                return str(message.content)
+        return ""
+
     def _parse_intermediate_steps(self, messages: List[Any]) -> List[Tuple[AgentAction, str]]:
         intermediate_steps = []
         for i, message in enumerate(messages):
-            if isinstance(message, AIMessage) and getattr(message, 'tool_calls', []):
-                for tool_call in message.tool_calls:
-                    observation_text = ""
-                    for next_message in messages[i + 1:]:
-                        if isinstance(next_message, ToolMessage) and getattr(next_message, 'tool_call_id', '') == tool_call.get("id"):
-                            observation_text = str(next_message.content)
-                            break
+            if not isinstance(message, AIMessage):
+                continue
+            
+            tool_calls = getattr(message, 'tool_calls', [])
+            if not tool_calls:
+                continue
 
-                    action_item = AgentAction(
-                        tool=tool_call.get("name", "unknown_tool"),
-                        tool_input=tool_call.get("args", {}),
-                        log=""
-                    )
-                    intermediate_steps.append((action_item, observation_text))
+            for tool_call in tool_calls:
+                observation_text = self._get_observation(messages[i + 1:], tool_call.get("id"))
+
+                action_item = AgentAction(
+                    tool=tool_call.get("name", "unknown_tool"),
+                    tool_input=tool_call.get("args", {}),
+                    log=""
+                )
+                intermediate_steps.append((action_item, observation_text))
         return intermediate_steps
 
     def _invoke_agent(self, agent: Any, input_content: str, attempt: int) -> Tuple[Optional[str], List[Tuple[AgentAction, str]]]:

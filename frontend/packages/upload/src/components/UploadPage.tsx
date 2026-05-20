@@ -58,6 +58,21 @@ export default function UploadPage({ onUpload, status }: UploadPageProps) {
     }
   };
 
+  const getButtonClasses = () => {
+    const baseClasses = "w-full max-w-xs py-3 px-6 rounded-xl font-semibold text-white transition-all shadow-md flex items-center justify-center gap-2";
+    if (selectedFiles.length === 0 || isUploading) {
+      return `${baseClasses} bg-gray-300 cursor-not-allowed shadow-none`;
+    }
+    return `${baseClasses} bg-gradient-to-r from-violet-500 to-indigo-600 hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5`;
+  };
+
+  const getStatusClasses = () => {
+    if (isSuccess) return "text-green-700 bg-green-50";
+    if (isError) return "text-red-700 bg-red-50";
+    if (isUploading) return "text-indigo-700 bg-indigo-50";
+    return "text-transparent";
+  };
+
   return (
     <main className="flex-1 bg-[#fafafa] h-full flex flex-col items-center justify-center py-10 px-8 overflow-hidden">
       <div className="flex flex-col items-center gap-8 w-full max-w-2xl">
@@ -82,13 +97,7 @@ export default function UploadPage({ onUpload, status }: UploadPageProps) {
           <button
             onClick={handleUploadClick}
             disabled={selectedFiles.length === 0 || isUploading}
-            className={`w-full max-w-xs py-3 px-6 rounded-xl font-semibold text-white transition-all shadow-md flex items-center justify-center gap-2
-              ${
-                selectedFiles.length === 0 || isUploading
-                  ? "bg-gray-300 cursor-not-allowed shadow-none"
-                  : "bg-gradient-to-r from-violet-500 to-indigo-600 hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
-              }
-            `}
+            className={getButtonClasses()}
           >
             {isUploading ? (
               <>
@@ -108,15 +117,7 @@ export default function UploadPage({ onUpload, status }: UploadPageProps) {
           </button>
 
           <div
-            className={`text-sm text-center px-4 py-2 rounded-lg ${
-              isSuccess
-                ? "text-green-700 bg-green-50"
-                : isError
-                  ? "text-red-700 bg-red-50"
-                  : isUploading
-                    ? "text-indigo-700 bg-indigo-50"
-                    : "text-transparent"
-            }`}
+            className={`text-sm text-center px-4 py-2 rounded-lg ${getStatusClasses()}`}
           >
             {status}
           </div>
