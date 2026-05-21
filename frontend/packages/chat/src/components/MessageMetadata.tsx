@@ -5,7 +5,7 @@ interface MessageMetadataProps {
 }
 
 export default function MessageMetadata({ metadata }: MessageMetadataProps) {
-  if (!metadata.steps?.length && !metadata.sources?.length) {
+  if (!metadata?.steps?.length && !metadata?.sources?.length) {
     return null;
   }
 
