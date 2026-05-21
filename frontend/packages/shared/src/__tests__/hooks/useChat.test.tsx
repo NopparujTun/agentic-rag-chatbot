@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useChat } from '../../hooks/useChat';
@@ -10,8 +10,8 @@ vi.mock('../../api', () => ({
   clearKnowledgeBase: vi.fn(),
 }));
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  React.createElement(ChatProvider, null, children)
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <ChatProvider>{children}</ChatProvider>
 );
 
 describe('useChat hook', () => {
@@ -41,20 +41,6 @@ describe('useChat hook', () => {
       answer: 'Mock response',
     });
     
-    // Use our wrapper but we need to inject the state.
-    // Let's just create a custom Context Provider for this test
-    const customWrapper = ({ children }: any) => {
-      const mockContext = { 
-        messages: [], setMessages: vi.fn(), 
-        isSending: true, setIsSending: vi.fn(), 
-        status: 'ready', setStatus: vi.fn(), 
-        activeView: 'chat', setActiveView: vi.fn(), 
-        isSidebarOpen: false, setIsSidebarOpen: vi.fn() 
-      };
-      // We need to import ChatContext for the provider, let's just mock useChatContext directly for this test
-      return <>{children}</>;
-    };
-
     // For useChat we can just mock useChatContext. Wait, we use ChatProvider normally. 
     // The easiest way is to mock useChatContext globally, or just call it, wait for isSending, then call again.
     const { result } = renderHook(() => useChat(), { wrapper });

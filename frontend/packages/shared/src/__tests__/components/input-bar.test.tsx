@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { InputBar } from '../../components/ui/input-bar';
@@ -30,7 +29,7 @@ describe('InputBar', () => {
   });
 
   it('handles textarea auto-resize', () => {
-    const { container } = render(<InputBar status="ready" onSend={() => {}} />);
+    render(<InputBar status="ready" onSend={() => {}} />);
     const textarea = screen.getByPlaceholderText('Send a message...') as HTMLTextAreaElement;
     
     // Mock the scrollHeight to trigger resize logic

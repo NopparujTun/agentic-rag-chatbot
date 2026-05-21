@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useUpload } from '../../hooks/useUpload';
@@ -9,8 +9,8 @@ vi.mock('../../api', () => ({
   uploadDocuments: vi.fn(),
 }));
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  React.createElement(ChatProvider, null, children)
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <ChatProvider>{children}</ChatProvider>
 );
 
 describe('useUpload hook', () => {

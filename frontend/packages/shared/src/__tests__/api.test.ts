@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { sendChatMessage, uploadDocuments, clearKnowledgeBase } from '../../src/api';
 
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+(global as any).fetch = mockFetch;
 
 describe('API functions', () => {
   beforeEach(() => {
