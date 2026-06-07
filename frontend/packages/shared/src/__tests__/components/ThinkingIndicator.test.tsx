@@ -1,8 +1,8 @@
-import { render, screen, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ThinkingIndicator } from '../../components/ThinkingIndicator';
+import { render, screen, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { ThinkingIndicator } from "../../components/ThinkingIndicator";
 
-describe('ThinkingIndicator', () => {
+describe("ThinkingIndicator", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -11,36 +11,36 @@ describe('ThinkingIndicator', () => {
     vi.useRealTimers();
   });
 
-  it('renders initial step when step prop is not provided', () => {
+  it("renders initial step when step prop is not provided", () => {
     render(<ThinkingIndicator />);
-    expect(screen.getByText('Rewriting query...')).toBeInTheDocument();
-    expect(screen.queryByText('Using tools...')).not.toBeInTheDocument();
+    expect(screen.getByText("Rewriting query...")).toBeInTheDocument();
+    expect(screen.queryByText("Using tools...")).not.toBeInTheDocument();
   });
 
-  it('advances internal step over time', () => {
+  it("advances internal step over time", () => {
     render(<ThinkingIndicator />);
-    
+
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(screen.getByText('Using tools...')).toBeInTheDocument();
-    
+    expect(screen.getByText("Using tools...")).toBeInTheDocument();
+
     act(() => {
       vi.advanceTimersByTime(8000); // 4 more steps
     });
-    expect(screen.getByText('Generating answer...')).toBeInTheDocument();
+    expect(screen.getByText("Generating answer...")).toBeInTheDocument();
   });
 
-  it('uses provided step prop', () => {
+  it("uses provided step prop", () => {
     render(<ThinkingIndicator step={2} />);
-    expect(screen.getByText('Rewriting query...')).toBeInTheDocument();
-    expect(screen.getByText('Using tools...')).toBeInTheDocument();
-    expect(screen.getByText('Searching knowledge base...')).toBeInTheDocument();
-    expect(screen.queryByText('Reading documents...')).not.toBeInTheDocument();
+    expect(screen.getByText("Rewriting query...")).toBeInTheDocument();
+    expect(screen.getByText("Using tools...")).toBeInTheDocument();
+    expect(screen.getByText("Searching knowledge base...")).toBeInTheDocument();
+    expect(screen.queryByText("Reading documents...")).not.toBeInTheDocument();
   });
 
-  it('caps the step properly', () => {
+  it("caps the step properly", () => {
     render(<ThinkingIndicator step={100} />);
-    expect(screen.getByText('Generating answer...')).toBeInTheDocument();
+    expect(screen.getByText("Generating answer...")).toBeInTheDocument();
   });
 });

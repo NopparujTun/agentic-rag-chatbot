@@ -1,5 +1,3 @@
-
-
 interface UploadFileListProps {
   files: File[];
 }

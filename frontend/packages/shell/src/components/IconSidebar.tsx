@@ -1,4 +1,3 @@
-
 interface IconSidebarProps {
   onLogoClick?: () => void;
   onHomeClick?: () => void;
@@ -12,7 +11,6 @@ export default function IconSidebar({
   onDocumentClick,
   activeView = "home",
 }: IconSidebarProps) {
-
   return (
     <aside className="flex flex-col items-center gap-6 pt-5 w-[72px] min-w-[72px] bg-[#fcfcfc] h-full shadow-[4px_0_16px_rgba(0,0,0,0.2)] z-10">
       {/* App Logo */}
@@ -41,8 +39,6 @@ export default function IconSidebar({
           <img src="/document.svg" alt="Library" className="w-6 h-6 opacity-80" />
         </button>
       </div>
-
-
     </aside>
   );
 }

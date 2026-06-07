@@ -37,7 +37,13 @@ export default function App() {
         }}
         activeView={activeView}
       />
-      <Suspense fallback={<div className="flex flex-1 items-center justify-center text-zinc-500">Loading Module...</div>}>
+      <Suspense
+        fallback={
+          <div className="flex flex-1 items-center justify-center text-zinc-500">
+            Loading Module...
+          </div>
+        }
+      >
         {isSidebarOpen && activeView !== "upload" && (
           <ChatSidebar
             onNewChat={() => {

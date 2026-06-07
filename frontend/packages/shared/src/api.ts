@@ -37,14 +37,7 @@ export interface UploadResponse {
   files_processed: string[];
 }
 
-/**
- * Helper function to retrieve headers.
- */
-const getHeaders = (baseHeaders: Record<string, string> = {}) => {
-  return {
-    ...baseHeaders,
-  };
-};
+
 
 /**
  * Parses the fetch response and throws meaningful errors on failure.
@@ -71,9 +64,9 @@ async function parseResponse<T>(response: Response): Promise<T> {
 export async function sendChatMessage(query: string, chatHistory: string) {
   const response = await fetch("/api/chat", {
     method: "POST",
-    headers: getHeaders({
+    headers: {
       "Content-Type": "application/json",
-    }),
+    },
     body: JSON.stringify({ query, chat_history: chatHistory }),
   });
 
@@ -93,7 +86,7 @@ export async function uploadDocuments(files: FileList) {
 
   const response = await fetch("/api/upload", {
     method: "POST",
-    headers: getHeaders(),
+
     body: formData,
   });
 
@@ -106,7 +99,7 @@ export async function uploadDocuments(files: FileList) {
 export async function clearKnowledgeBase() {
   const response = await fetch("/api/clear", {
     method: "POST",
-    headers: getHeaders(),
+
   });
 
   return parseResponse<{ message: string }>(response);
