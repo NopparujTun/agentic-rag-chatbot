@@ -25,7 +25,7 @@ def test_determine_pdf_type_scanned(mock_fitz_open):
     mock_page.get_text.return_value = "   "
     mock_page.get_images.return_value = []
     mock_doc.__getitem__.return_value = mock_page
-    mock_fitz_open.return_value = mock_doc
+    mock_fitz_open.return_value.__enter__.return_value = mock_doc
     
     pdf_type = pdf_processor._determine_pdf_type("test.pdf")
     assert pdf_type == "scanned"
@@ -37,7 +37,7 @@ def test_determine_pdf_type_image_heavy(mock_fitz_open):
     mock_page.get_text.return_value = "this is a very long string that is definitely more than fifty characters long"
     mock_page.get_images.return_value = [1, 2, 3] # More than 2
     mock_doc.__getitem__.return_value = mock_page
-    mock_fitz_open.return_value = mock_doc
+    mock_fitz_open.return_value.__enter__.return_value = mock_doc
     
     pdf_type = pdf_processor._determine_pdf_type("test.pdf")
     assert pdf_type == "image_heavy"
@@ -49,7 +49,7 @@ def test_determine_pdf_type_digital(mock_fitz_open):
     mock_page.get_text.return_value = "this is a very long string that is definitely more than fifty characters long"
     mock_page.get_images.return_value = [1] # <= 2
     mock_doc.__getitem__.return_value = mock_page
-    mock_fitz_open.return_value = mock_doc
+    mock_fitz_open.return_value.__enter__.return_value = mock_doc
     
     pdf_type = pdf_processor._determine_pdf_type("test.pdf")
     assert pdf_type == "digital"

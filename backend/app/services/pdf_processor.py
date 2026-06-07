@@ -129,15 +129,13 @@ def convert_complex_pdfs_vlm(pdf_path: str, api_key: str, model_name: str = "gem
     from google import genai
 
     gemini_client = genai.Client(api_key=api_key)
-    pdf_document = fitz.open(pdf_path)
     markdown_pages = {}
 
-    for page_index in range(pdf_document.page_count):
-        _process_single_page_vlm(
-            pdf_document, page_index, gemini_client, model_name, markdown_pages
-        )
-
-    pdf_document.close()
+    with fitz.open(pdf_path) as pdf_document:
+        for page_index in range(pdf_document.page_count):
+            _process_single_page_vlm(
+                pdf_document, page_index, gemini_client, model_name, markdown_pages
+            )
 
     combined_markdown = "\n\n---\n\n".join([
         f"# Page {page_number}\n\n{content}"
@@ -207,22 +205,20 @@ def _determine_pdf_type(file_path: str) -> str:
     Returns:
         A string indicating the type: 'scanned', 'image_heavy', or 'digital'.
     """
-    pdf_document = fitz.open(file_path)
-    sample_page = pdf_document[0]
+    with fitz.open(file_path) as pdf_document:
+        sample_page = pdf_document[0]
 
-    extracted_text = sample_page.get_text()
-    is_scanned = len(extracted_text.strip()) < 50
+        extracted_text = sample_page.get_text()
+        is_scanned = len(extracted_text.strip()) < 50
 
-    image_count = len(sample_page.get_images())
-    has_many_images = image_count > 2
-
-    pdf_document.close()
+        image_count = len(sample_page.get_images())
+        has_many_images = image_count > 2
 
     if is_scanned:
-        return 'scanned'
+        return PDF_TYPE_SCANNED
     if has_many_images:
-        return 'image_heavy'
-    return 'digital'
+        return PDF_TYPE_IMAGE_HEAVY
+    return PDF_TYPE_DIGITAL
 
 
 def _process_scanned_pdf(file_path: str) -> str:
@@ -319,9 +315,9 @@ def process_file(file_path: str, output_dir: str, api_key: Optional[str] = None)
             pdf_type = _determine_pdf_type(file_path)
             active_api_key = api_key or os.environ.get("GOOGLE_API_KEY")
 
-            if pdf_type == 'scanned':
+            if pdf_type == PDF_TYPE_SCANNED:
                 markdown_text = _process_scanned_pdf(file_path)
-            elif pdf_type == 'image_heavy' and active_api_key:
+            elif pdf_type == PDF_TYPE_IMAGE_HEAVY and active_api_key:
                 logger.info("→ Using VLM (image-heavy)")
                 markdown_text = convert_complex_pdfs_vlm(file_path, active_api_key)
             else:
