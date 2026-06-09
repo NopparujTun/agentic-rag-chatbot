@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { type ChatMessage, useTypingEffect, ThinkingIndicator } from "@mfa/shared";
+import { type ChatMessage, useTypingEffect, ThinkingIndicator } from "@/index";
 import MessageMetadata from "./MessageMetadata";
 
 interface MessageItemProps {

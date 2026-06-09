@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import MessageMetadata from "../../components/MessageMetadata";
-import type { ChatResponse } from "@mfa/shared";
+import type { ChatResponse } from "@/index";
 
 describe("MessageMetadata", () => {
   it("renders nothing if no metadata", () => {

@@ -2,13 +2,13 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import App from "../../src/App";
-import * as shared from "@mfa/shared";
+import * as shared from "@/index";
 
-vi.mock("chat/MainContent", () => ({
+vi.mock("@/components/MainContent", () => ({
   default: () => <div data-testid="main-content" />,
 }));
 
-vi.mock("chat/ChatSidebar", () => ({
+vi.mock("@/components/ChatSidebar", () => ({
   default: ({ onCollapse, onNewChat, onClearKnowledgeBase }: Record<string, () => void>) => (
     <div data-testid="chat-sidebar">
       <button data-testid="sidebar-collapse" onClick={onCollapse}>
@@ -24,7 +24,7 @@ vi.mock("chat/ChatSidebar", () => ({
   ),
 }));
 
-vi.mock("upload/UploadPage", () => ({
+vi.mock("@/components/UploadPage", () => ({
   default: () => <div data-testid="upload-page" />,
 }));
 
@@ -48,7 +48,7 @@ vi.mock("../../src/components/IconSidebar", () => ({
   ),
 }));
 
-vi.mock("@mfa/shared", async () => {
+vi.mock("@/index", async () => {
   return {
     useChatContext: vi.fn(),
     useChat: () => ({ handleSendMessage: vi.fn(), handleClear: vi.fn() }),

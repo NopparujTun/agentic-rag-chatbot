@@ -1,4 +1,4 @@
-import { ChatInput, HeroSection } from "@mfa/shared";
+import { ChatInput, HeroSection } from "@/index";
 
 interface HomePageProps {
   isSending: boolean;

@@ -1,4 +1,4 @@
-import { ChatInput, HeroSection, type ChatMessage } from "@mfa/shared";
+import { ChatInput, HeroSection, type ChatMessage } from "@/index";
 import MessageItem from "./MessageItem";
 
 interface MainContentProps {

@@ -6,10 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      'chat/MainContent': path.resolve(__dirname, './packages/chat/src/components/MainContent.tsx'),
-      'chat/ChatSidebar': path.resolve(__dirname, './packages/chat/src/components/ChatSidebar.tsx'),
-      'upload/UploadPage': path.resolve(__dirname, './packages/upload/src/components/UploadPage.tsx'),
-      '@mfa/shared': path.resolve(__dirname, './packages/shared/src/index.ts'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   test: {
@@ -32,8 +29,8 @@ export default defineConfig({
         branches: 80,
         statements: 80
       },
-      include: ['packages/**/src/**/*.{ts,tsx}'],
-      exclude: ['packages/**/src/main.tsx', 'packages/**/src/vite-env.d.ts', '**/*.d.ts']
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/main.tsx', 'src/vite-env.d.ts', '**/*.d.ts']
     },
   },
 });

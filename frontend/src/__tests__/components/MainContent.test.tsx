@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import MainContent from "../../components/MainContent";
-import type { ChatMessage } from "@mfa/shared";
+import type { ChatMessage } from "@/index";
 
-vi.mock("@mfa/shared", () => ({
+vi.mock("@/index", () => ({
   HeroSection: () => <div data-testid="hero-section" />,
   ChatInput: () => <div data-testid="chat-input" />,
 }));

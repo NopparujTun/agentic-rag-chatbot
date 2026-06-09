@@ -1,18 +1,11 @@
 {
   "name": "@mfa/frontend",
-  "private": "true",
+  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:shell\" \"npm run dev:chat\" \"npm run dev:upload\"",
-    "dev:shell": "cd packages/shell && vite",
-    "dev:chat": "cd packages/chat && vite",
-    "dev:upload": "cd packages/upload && vite",
-    "build": "npm run build:shared && npm run build:chat && npm run build:upload && npm run build:shell",
-    "build:shared": "cd packages/shared && tsc",
-    "build:shell": "cd packages/shell && vite build",
-    "build:chat": "cd packages/chat && vite build",
-    "build:upload": "cd packages/upload && vite build",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
@@ -26,7 +19,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@originjs/vite-plugin-federation": "^1.4.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -36,14 +28,13 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-istanbul": "^4.1.7",
     "@vitest/coverage-v8": "^4.1.7",
-    "concurrently": "^9.2.1",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
     "jsdom": "^29.1.1",
     "prettier": "^3.8.3",
-    "typescript": "~6.0.2",
+    "typescript": "~5.6.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10",
     "vitest": "^4.1.7"
@@ -52,8 +43,5 @@
   "main": "eslint.config.js",
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "workspaces": [
-    "packages/*"
-  ]
+  "license": "ISC"
 }

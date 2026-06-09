@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import MessageItem from "../../components/MessageItem";
-import type { ChatMessage } from "@mfa/shared";
+import type { ChatMessage } from "@/index";
 
-vi.mock("@mfa/shared", async (importOriginal) => {
+vi.mock("@/index", async (importOriginal) => {
   const actual = (await importOriginal()) as any;
   return {
     ...actual,

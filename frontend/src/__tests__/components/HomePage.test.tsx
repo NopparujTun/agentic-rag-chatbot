@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import HomePage from "../../components/HomePage";
 
-vi.mock("@mfa/shared", () => ({
+vi.mock("@/index", () => ({
   HeroSection: () => <div data-testid="hero-section" />,
   ChatInput: ({ isSending, onSendMessage, onUploadDocuments }: { isSending: boolean; onSendMessage: (msg: string) => void; onUploadDocuments: (files: unknown[]) => void }) => (
     <div data-testid="chat-input" data-sending={isSending}>

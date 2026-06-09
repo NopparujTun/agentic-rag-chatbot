@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
 import IconSidebar from "./components/IconSidebar";
 import HomePage from "./components/HomePage";
-import { useChatContext, useChat, useUpload } from "@mfa/shared";
+import { useChatContext, useChat, useUpload } from "@/index";
 
 // Lazy load remote modules
-const ChatSidebar = React.lazy(() => import("chat/ChatSidebar"));
-const MainContent = React.lazy(() => import("chat/MainContent"));
-const UploadPage = React.lazy(() => import("upload/UploadPage"));
+const ChatSidebar = React.lazy(() => import("@/components/ChatSidebar"));
+const MainContent = React.lazy(() => import("@/components/MainContent"));
+const UploadPage = React.lazy(() => import("@/components/UploadPage"));
 
 export default function App() {
   const {
