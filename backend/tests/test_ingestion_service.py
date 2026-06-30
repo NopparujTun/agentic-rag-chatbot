@@ -63,21 +63,20 @@ def test_run_ingestion_pipeline_empty(mock_chunk, mock_process):
     with pytest.raises(ValueError):
         ingestion_service.run_ingestion_pipeline(["test.pdf"], "model", "index")
 
-@patch("app.services.s3_service.download_file_from_s3")
-@patch("app.core.dependencies.get_lazy_embedding_model")
+@patch("app.services.document_store.document_store")
+@patch("app.core.dependencies.resources")
 @patch("app.services.ingestion_service.run_ingestion_pipeline")
-@patch("app.core.dependencies.clear_global_store")
 @patch("app.core.config.load_config")
-def test_run_ingestion_background(mock_load_config, mock_clear, mock_run, mock_get_model, mock_download):
+def test_run_ingestion_background(mock_load_config, mock_run, mock_resources, mock_store):
     mock_load_config.return_value = {
         "vector_db": {"index_name": "test"},
         "ingestion": {"chunk_size": 100, "chunk_overlap": 20}
     }
-    mock_get_model.return_value = "model"
+    mock_resources.embedding_model.return_value = "model"
     mock_run.return_value = ("store", 1, 1.0)
-    
+
     ingestion_service.run_ingestion_background(["test.pdf"])
-    
-    mock_download.assert_called_once()
+
+    mock_store.get.assert_called_once()
     mock_run.assert_called_once()
-    mock_clear.assert_called_once()
+    mock_resources.reset.assert_called_once()
