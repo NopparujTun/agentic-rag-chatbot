@@ -1,22 +1,8 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 from langchain_core.documents import Document
 
 from app.rag import retriever
-
-@patch("app.rag.retriever.PineconeEmbeddings")
-def test_get_embedding_model(mock_embeddings):
-    mock_embeddings.return_value = "mock_model"
-    model = retriever.get_embedding_model("test-model", "cpu")
-    assert model == "mock_model"
-    mock_embeddings.assert_called_once_with(model="test-model")
-
-@patch("app.rag.retriever.CrossEncoder")
-def test_get_reranker(mock_cross_encoder):
-    mock_cross_encoder.return_value = "mock_reranker"
-    model = retriever.get_reranker("test-model", "cpu")
-    assert model == "mock_reranker"
-    mock_cross_encoder.assert_called_once_with("test-model", max_length=512, device="cpu")
 
 def test_pinecone_retriever_search_no_reranker():
     mock_vs = MagicMock()

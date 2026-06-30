@@ -3,18 +3,13 @@
 import logging
 from typing import List, Dict, Any
 
-from fastapi import APIRouter, BackgroundTasks, UploadFile, File, HTTPException
+from fastapi import APIRouter, BackgroundTasks, UploadFile, File, HTTPException, Depends
 
 from app.models.schemas import ChatRequest
-from app.services.chat_service import process_chat
+from app.services.chat_service import answer_query
 from app.services.ingestion_service import run_ingestion_background
-from app.storage.vector_store import clear_vector_store
-from app.core.dependencies import (
-    get_lazy_vector_store,
-    get_lazy_reranker,
-    clear_global_store,
-)
-from app.services.s3_service import upload_file_to_s3
+from app.services.document_store import DocumentStore, get_document_store
+from app.core.dependencies import Resources, get_resources
 
 logger = logging.getLogger(__name__)
 
@@ -25,17 +20,17 @@ api_router = APIRouter()
 
 
 @api_router.post("/api/chat")
-async def chat_endpoint(body: ChatRequest) -> Dict[str, Any]:
+async def chat_endpoint(
+    body: ChatRequest,
+    resources: Resources = Depends(get_resources),
+) -> Dict[str, Any]:
     """Handle user queries and generate answers via the agentic RAG pipeline."""
     try:
-        vector_store = get_lazy_vector_store()
-        reranker = get_lazy_reranker()
-
-        return process_chat(
+        return answer_query(
             query=body.query,
             chat_history=body.chat_history,
-            vector_store=vector_store,
-            reranker=reranker,
+            vector_store=resources.vector_store(),
+            reranker=resources.reranker(),
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -48,8 +43,9 @@ async def chat_endpoint(body: ChatRequest) -> Dict[str, Any]:
 async def upload_document(
     background_tasks: BackgroundTasks,
     files: List[UploadFile] = File(...),
+    store: DocumentStore = Depends(get_document_store),
 ) -> Dict[str, Any]:
-    """Upload documents to S3 and kick off background ingestion.
+    """Upload documents to the document store and kick off background ingestion.
 
     Ingestion runs asynchronously via FastAPI BackgroundTasks — the response
     returns immediately while processing continues in the background.
@@ -61,8 +57,8 @@ async def upload_document(
             continue
 
         file_bytes = await uploaded_file.read()
-        s3_url = upload_file_to_s3(file_bytes, uploaded_file.filename)
-        logger.info(f"Uploaded {uploaded_file.filename} to S3 at {s3_url}")
+        locator = store.put(uploaded_file.filename, file_bytes)
+        logger.info(f"Uploaded {uploaded_file.filename} to {locator}")
         saved_filenames.append(uploaded_file.filename)
 
     if not saved_filenames:
@@ -80,16 +76,12 @@ async def upload_document(
 
 
 @api_router.post("/api/clear")
-async def clear_kb() -> Dict[str, str]:
+async def clear_kb(
+    resources: Resources = Depends(get_resources),
+) -> Dict[str, str]:
     """Clear the Pinecone knowledge base."""
     try:
-        vector_store = get_lazy_vector_store()
-        if vector_store is not None:
-            clear_vector_store(vector_store)
-
-        clear_global_store()
-        get_lazy_vector_store()  # trigger reload
-
+        resources.clear_knowledge_base()
         return {"message": "Knowledge Base cleared successfully."}
     except Exception as e:
         logger.error(f"Clear KB error: {e}")
@@ -97,11 +89,8 @@ async def clear_kb() -> Dict[str, str]:
 
 
 @api_router.get("/api/health")
-async def health_check() -> Dict[str, Any]:
+async def health_check(
+    resources: Resources = Depends(get_resources),
+) -> Dict[str, Any]:
     """Return the current health and readiness status of the API."""
-    from app.core.dependencies import _embedding_model, _vector_store
-    return {
-        "status": "healthy",
-        "models_loaded": _embedding_model is not None,
-        "kb_ready": _vector_store is not None,
-    }
+    return {"status": "healthy", **resources.status()}

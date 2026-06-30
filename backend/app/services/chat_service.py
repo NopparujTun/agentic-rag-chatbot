@@ -1,30 +1,32 @@
 import time
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
-from app.rag.generator import generate_answer
+from app.rag.generator import RAGAgent
+from app.rag.retriever import PineconeRetriever
 
 logger = logging.getLogger(__name__)
 
-def process_chat(
+def answer_query(
     query: str,
     chat_history: str,
     vector_store: Any,
     reranker: Any,
 ) -> Dict[str, Any]:
-    """Encapsulates the business logic for the chat operation."""
+    """Run the agentic RAG pipeline for one query and serialize the response."""
     if vector_store is None:
         raise ValueError("Database not initialized. Please upload files first.")
-         
+
+    retriever = PineconeRetriever(vector_store, reranker)
+    agent = RAGAgent(retriever)
+
     start_time = time.time()
-    answer, retrieved_sources, steps_taken = generate_answer(
+    answer, retrieved_sources, steps_taken = agent.generate(
         query=query,
-        vectorstore=vector_store,
         chat_history=chat_history,
-        reranker=reranker,
     )
     response_time = time.time() - start_time
-    
+
     serialized_sources = [
         {
             "content": doc.page_content,
@@ -32,7 +34,7 @@ def process_chat(
         }
         for doc in retrieved_sources
     ] if retrieved_sources else []
-    
+
     serialized_steps = [
         {
             "tool": action.tool,
@@ -41,7 +43,7 @@ def process_chat(
         }
         for action, observation in steps_taken
     ] if steps_taken else []
-    
+
     return {
         "answer": answer,
         "sources": serialized_sources,

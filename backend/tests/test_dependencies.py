@@ -1,62 +1,77 @@
-import pytest
 from unittest.mock import patch, MagicMock
 from app.core import dependencies
+from app.core.dependencies import Resources
 
-@pytest.fixture(autouse=True)
-def reset_globals():
-    dependencies.clear_global_store()
-    dependencies._embedding_model = None
-    dependencies._reranker = None
-    yield
 
-@patch("app.core.dependencies.get_embedding_model")
-def test_get_lazy_embedding_model(mock_get_embedding_model):
-    mock_model = MagicMock()
-    mock_get_embedding_model.return_value = mock_model
-    
-    # First call should load it
-    model1 = dependencies.get_lazy_embedding_model()
-    assert model1 == mock_model
-    mock_get_embedding_model.assert_called_once()
-    
-    # Second call should return cached
-    model2 = dependencies.get_lazy_embedding_model()
-    assert model2 == mock_model
-    assert mock_get_embedding_model.call_count == 1
+@patch("app.core.dependencies.PineconeEmbeddings")
+def test_embedding_model_lazy_and_cached(mock_embeddings):
+    mock_embeddings.return_value = MagicMock()
+    res = Resources()
 
-@patch("app.core.dependencies.get_lazy_embedding_model")
+    model1 = res.embedding_model()
+    model2 = res.embedding_model()
+
+    assert model1 is model2
+    mock_embeddings.assert_called_once()
+
+
 @patch("app.core.dependencies.load_vector_store")
-def test_get_lazy_vector_store(mock_load_vector_store, mock_get_lazy_embedding_model):
-    mock_store = MagicMock()
-    mock_load_vector_store.return_value = mock_store
-    
-    # First call should load it
-    store1 = dependencies.get_lazy_vector_store()
-    assert store1 == mock_store
+@patch("app.core.dependencies.PineconeEmbeddings")
+def test_vector_store_lazy_and_cached(mock_embeddings, mock_load_vector_store):
+    mock_load_vector_store.return_value = MagicMock()
+    res = Resources()
+
+    store1 = res.vector_store()
+    store2 = res.vector_store()
+
+    assert store1 is store2
     mock_load_vector_store.assert_called_once()
-    mock_get_lazy_embedding_model.assert_called_once()
-    
-    # Second call should return cached
-    store2 = dependencies.get_lazy_vector_store()
-    assert store2 == mock_store
-    assert mock_load_vector_store.call_count == 1
+    mock_embeddings.assert_called_once()
 
-@patch("app.core.dependencies.get_reranker")
-def test_get_lazy_reranker(mock_get_reranker):
-    mock_reranker = MagicMock()
-    mock_get_reranker.return_value = mock_reranker
-    
-    # First call should load it
-    reranker1 = dependencies.get_lazy_reranker()
-    assert reranker1 == mock_reranker
-    mock_get_reranker.assert_called_once()
-    
-    # Second call should return cached
-    reranker2 = dependencies.get_lazy_reranker()
-    assert reranker2 == mock_reranker
-    assert mock_get_reranker.call_count == 1
 
-def test_clear_global_store():
-    dependencies._vector_store = "something"
-    dependencies.clear_global_store()
-    assert dependencies._vector_store is None
+@patch("app.core.dependencies.CrossEncoder")
+def test_reranker_lazy_and_cached(mock_cross_encoder):
+    mock_cross_encoder.return_value = MagicMock()
+    res = Resources()
+
+    reranker1 = res.reranker()
+    reranker2 = res.reranker()
+
+    assert reranker1 is reranker2
+    mock_cross_encoder.assert_called_once()
+
+
+@patch("app.core.dependencies.load_vector_store")
+@patch("app.core.dependencies.PineconeEmbeddings")
+def test_reset_forces_vector_store_reload(mock_embeddings, mock_load_vector_store):
+    mock_load_vector_store.return_value = MagicMock()
+    res = Resources()
+
+    res.vector_store()
+    res.reset()
+    res.vector_store()
+
+    assert mock_load_vector_store.call_count == 2
+
+
+@patch("app.core.dependencies.clear_vector_store")
+@patch("app.core.dependencies.load_vector_store")
+@patch("app.core.dependencies.PineconeEmbeddings")
+def test_clear_knowledge_base_wipes_and_resets(mock_embeddings, mock_load_vector_store, mock_clear):
+    store = MagicMock()
+    mock_load_vector_store.return_value = store
+    res = Resources()
+
+    res.clear_knowledge_base()
+
+    mock_clear.assert_called_once_with(store)
+    assert res._vector_store is None
+
+
+def test_status_does_not_force_a_load():
+    res = Resources()
+    assert res.status() == {"models_loaded": False, "kb_ready": False}
+
+
+def test_get_resources_returns_singleton():
+    assert dependencies.get_resources() is dependencies.resources

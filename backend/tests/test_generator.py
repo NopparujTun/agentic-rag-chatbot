@@ -115,15 +115,3 @@ def test_generate_success(mock_create_react_agent, mock_chat, mock_retriever):
     # We just ensure it runs cleanly
     assert len(docs) == 0
     assert steps == []
-
-@patch("app.rag.generator.PineconeRetriever")
-@patch("app.rag.generator.RAGAgent")
-def test_generate_answer(mock_rag_agent_class, mock_retriever_class):
-    mock_agent = MagicMock()
-    mock_agent.generate.return_value = ("Ans", [], [])
-    mock_rag_agent_class.return_value = mock_agent
-    
-    ans, docs, steps = generator.generate_answer("q", "store", "hist", "reranker")
-    assert ans == "Ans"
-    assert docs == []
-    assert steps == []

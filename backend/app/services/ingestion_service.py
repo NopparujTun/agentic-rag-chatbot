@@ -179,9 +179,9 @@ def run_ingestion_background(filenames: list) -> None:
     import shutil
     import tempfile
 
-    from app.core.dependencies import get_lazy_embedding_model, clear_global_store
+    from app.core.dependencies import resources
     from app.core.config import load_config
-    from app.services.s3_service import download_file_from_s3
+    from app.services.document_store import document_store
 
     logger.info("Background ingestion started for %d file(s).", len(filenames))
     app_config = load_config()
@@ -191,10 +191,10 @@ def run_ingestion_background(filenames: list) -> None:
         local_paths = []
         for filename in filenames:
             local_path = os.path.join(temp_dir, filename)
-            download_file_from_s3(filename, local_path)
+            document_store.get(filename, local_path)
             local_paths.append(local_path)
 
-        embedding_model = get_lazy_embedding_model()
+        embedding_model = resources.embedding_model()
 
         _, total_chunks, duration = run_ingestion_pipeline(
             file_paths=local_paths,
@@ -204,8 +204,8 @@ def run_ingestion_background(filenames: list) -> None:
             chunk_overlap=app_config["ingestion"]["chunk_overlap"],
         )
 
-        # Force the next request to reload the updated store from disk/Pinecone
-        clear_global_store()
+        # Force the next request to reload the updated store from Pinecone
+        resources.reset()
         logger.info(
             "Background ingestion complete: %d chunks in %.2fs. Store reloaded.",
             total_chunks,

@@ -10,7 +10,6 @@ from langchain_core.documents import Document
 from langchain_core.messages import SystemMessage, ToolMessage, AIMessage
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
-from sentence_transformers import CrossEncoder
 
 from app.rag.retriever import PineconeRetriever
 from app.tools.search import create_search_tool
@@ -140,25 +139,3 @@ class RAGAgent:
                 return output, self.retrieved_documents, intermediate_steps
 
         return API_ERROR_MESSAGE, [], []
-
-
-def generate_answer(
-    query: str,
-    vectorstore: Any,
-    chat_history: str = "",
-    reranker: Optional[CrossEncoder] = None,
-) -> Tuple[str, List[Document], List[Tuple[AgentAction, str]]]:
-    """Generate an answer using the agentic RAG pipeline.
-
-    Args:
-        query: The user's question.
-        vectorstore: The Pinecone vector store instance.
-        chat_history: Formatted string of prior conversation turns.
-        reranker: Optional cross-encoder model for precision reranking.
-
-    Returns:
-        A tuple of (answer, retrieved_documents, intermediate_steps).
-    """
-    retriever = PineconeRetriever(vectorstore, reranker)
-    rag_agent = RAGAgent(retriever)
-    return rag_agent.generate(query, chat_history)

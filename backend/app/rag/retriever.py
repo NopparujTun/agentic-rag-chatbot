@@ -1,27 +1,10 @@
 """Pinecone retrieval with optional Cross-Encoder re-ranking."""
 
-import logging
 from typing import List, Optional
 
 from langchain_core.documents import Document
-from langchain_core.embeddings import Embeddings
-from langchain_pinecone import PineconeVectorStore, PineconeEmbeddings
+from langchain_pinecone import PineconeVectorStore
 from sentence_transformers import CrossEncoder
-
-logger = logging.getLogger(__name__)
-
-def get_embedding_model(model_name: str, device: str) -> Embeddings:
-    """Load and return a Pinecone embedding model."""
-    logger.info("Loading Pinecone embedding model: %s", model_name)
-    embeddings = PineconeEmbeddings(model=model_name)
-    logger.info("Embedding model loaded successfully")
-    return embeddings
-
-
-def get_reranker(model_name: str = "BAAI/bge-reranker-v2-m3", device: str = "cpu") -> CrossEncoder:
-    """Load a Cross-Encoder model for precision re-ranking."""
-    logger.info("Loading Re-ranker model: %s (device=%s)", model_name, device)
-    return CrossEncoder(model_name, max_length=512, device=device)
 
 
 class PineconeRetriever:
